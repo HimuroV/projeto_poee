@@ -1,5 +1,7 @@
 package com.projeto.model.service;
 
+import java.util.List;
+
 import javax.persistence.EntityTransaction;
 
 import com.projeto.estrutura.util.VariaveisProjeto;
@@ -46,7 +48,7 @@ public class UsuarioService extends ConexaoBancoService {
 		return toReturn;
 	}
 	
-public Integer update(Usuario usuario) {
+	public Integer update(Usuario usuario) {
 		
 		Integer toReturn = 0;
 		
@@ -78,10 +80,43 @@ public Integer update(Usuario usuario) {
 		return toReturn;
 	}
 	
-	
+	public Integer delete(Usuario usuario) {
+
+		Integer toReturn = 0;
+
+		EntityTransaction trx = this.getTransaction();
+
+
+		try {
+
+			trx.begin();
+			Usuario usuarioEncontrado = this.getUsuarioDao().findById(usuario.getId());
+			this.getUsuarioDao().remove(usuarioEncontrado);
+			trx.commit();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			if ( trx.isActive() ) {
+				trx.rollback();
+			}
+			toReturn = VariaveisProjeto.ERRO_EXCLUSAO;
+
+		} finally {
+			this.close();
+		}
+
+		return toReturn;
+	}
+
 	public Usuario findById(Integer id) {
 		return this.getUsuarioDao().findById(id);
 	}
+	
+	
+	public List<Usuario> findAll(){
+		return this.getUsuarioDao().findAll(Usuario.class);
+	}
+	
 	
 	public Integer validarDigitacao(Usuario usuario) {
 		

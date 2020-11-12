@@ -2,6 +2,8 @@ package projeto;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import com.projeto.model.models.Usuario;
@@ -15,9 +17,9 @@ public class UsuarioTest {
 		Usuario usuario = new Usuario();
 		
 		//usuario.setId(2);
-		usuario.setUsername("Roberto Carlos da Silva");
-		usuario.setPassword("123456");
-		usuario.setEmail("roberto@carlos.silva.com.br");
+		usuario.setUsername("Maria Fernanda");
+		usuario.setPassword("2468");
+		usuario.setEmail("maria@maria.br");
 		usuario.setAtivo(false);
 		usuario.setAdmin(false);
 		
@@ -28,20 +30,31 @@ public class UsuarioTest {
 		System.out.println("Gravando usuário no banco de dados");
 		
 		//assertTrue(true);
+		
+		usuario = new Usuario();
+		
+		//usuario.setId(2);
+		usuario.setUsername("Clara Vieria");
+		usuario.setPassword("1379");
+		usuario.setEmail("clara@clara.br");
+		usuario.setAtivo(false);
+		usuario.setAdmin(false);
+		
+		UsuarioService usuarioService1 = new UsuarioService();
+		
+		usuarioService1.save(usuario);
+		
+		System.out.println("Gravando usuário no banco de dados");
 	}
 	
 	
 	
-	@Test(expected = Exception.class)
+	//@Test(expected = Exception.class)
 	public void alterarUsuarioBancoDadosTeste() {
 		
 		Usuario usuario = new Usuario();
 		
-		usuario.setId(1);
-		
-		
-		
-		
+		usuario.setId(2);
 		
 		//usuario.setUsername("Roberto Carlos da Silva");
 		//usuario.setPassword("123456");
@@ -55,7 +68,7 @@ public class UsuarioTest {
 		
 		System.out.print(usuario.toString());
 		
-		usuario.setEmail("roberto@carlos.com.br");
+		usuario.setEmail("joao@joao.com.br");
 		
 		usuarioService.update(usuario);
 				
@@ -63,4 +76,32 @@ public class UsuarioTest {
 		
 		//assertTrue(true);
 	}
+	
+	//@Test(expected = Exception.class)
+	public void listarTodosUsuarioTabelUsuario() {
+		
+		UsuarioService usuarioService = new UsuarioService();
+		
+		List<Usuario> listaUsuario = usuarioService.findAll();
+		
+		for (Usuario usuario : listaUsuario) {
+			System.out.println(usuario.toString());
+		}
+		
+	}
+	
+	//@Test
+	public void excluirUsuarioDaTabela() {
+		
+		Usuario usuario = new Usuario();
+		
+		usuario.setId(6);
+		
+		UsuarioService usuarioService = new UsuarioService();
+		
+		usuarioService.delete(usuario);
+		
+		
+	}
+	
 }
