@@ -5,31 +5,31 @@ import java.util.List;
 import javax.persistence.EntityTransaction;
 
 import com.projeto.estrutura.util.VariaveisProjeto;
-import com.projeto.model.dao.UsuarioDao;
-import com.projeto.model.models.Usuario;
+import com.projeto.model.dao.ClienteDao;
+import com.projeto.model.models.Cliente;
 
-public class UsuarioService extends ConexaoBancoService {
+public class ClienteService extends ConexaoBancoService{
+
+private ClienteDao clienteDao;
 	
-	private UsuarioDao usuarioDao;
-	
-	public UsuarioService() {
-		this.usuarioDao = new UsuarioDao(this.getEntityManager());
+	public ClienteService() {
+		this.clienteDao = new ClienteDao(this.getEntityManager());
 	}
 
-	public Integer save(Usuario usuario) {
+	public Integer save(Cliente cliente) {
 		
 		Integer toReturn = 0;
 		
 		EntityTransaction trx = this.getTransaction();
 		
-		if ( validarDigitacao(usuario) == VariaveisProjeto.DIGITACAO_OK) {
+		if ( validarDigitacao(cliente) == VariaveisProjeto.DIGITACAO_OK) {
 		
 			try {
 			
 				trx.begin();
-				this.getUsuarioDao().save(usuario);
+				this.getClienteDao().save(cliente);
 				trx.commit();
-				toReturn = VariaveisProjeto.INCLUSAO_REALIZADA;
+			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -48,21 +48,20 @@ public class UsuarioService extends ConexaoBancoService {
 		return toReturn;
 	}
 	
-	public Integer update(Usuario usuario) {
+	public Integer update(Cliente cliente) {
 		
 		Integer toReturn = 0;
 		
 		EntityTransaction trx = this.getTransaction();
 		
-		toReturn = validarDigitacao(usuario);
-		if ( toReturn == VariaveisProjeto.DIGITACAO_OK) {
+		if ( validarDigitacao(cliente) == VariaveisProjeto.DIGITACAO_OK) {
 		
 			try {
 			
 				trx.begin();
-				this.getUsuarioDao().update(usuario);
+				this.getClienteDao().update(cliente);
 				trx.commit();
-				toReturn = VariaveisProjeto.ALTERACAO_REALIZADA;
+			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -74,11 +73,14 @@ public class UsuarioService extends ConexaoBancoService {
 				this.close();
 			}
 		
-		}		
+		}else {
+			toReturn = VariaveisProjeto.NOME_CAMPO_VAZIO;
+		}
+		
 		return toReturn;
 	}
 	
-	public Integer delete(Usuario usuario) {
+	public Integer delete(Cliente cliente) {
 
 		Integer toReturn = 0;
 
@@ -88,10 +90,10 @@ public class UsuarioService extends ConexaoBancoService {
 		try {
 
 			trx.begin();
-			Usuario usuarioEncontrado = this.getUsuarioDao().findById(usuario.getId());
-			this.getUsuarioDao().remove(usuarioEncontrado);
+			Cliente clienteEncontrado = this.getClienteDao().findById(cliente.getId());
+			this.getClienteDao().remove(clienteEncontrado);
 			trx.commit();
-			toReturn = VariaveisProjeto.EXCLUSAO_REALIZADA;
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if ( trx.isActive() ) {
@@ -106,19 +108,19 @@ public class UsuarioService extends ConexaoBancoService {
 		return toReturn;
 	}
 
-	public Usuario findById(Integer id) {
-		return this.getUsuarioDao().findById(id);
+	public Cliente findById(Integer id) {
+		return this.getClienteDao().findById(id);
 	}
 	
 	
-	public List<Usuario> findAll(){
-		return this.getUsuarioDao().findAll(Usuario.class);
+	public List<Cliente> findAll(){
+		return this.getClienteDao().findAll(Cliente.class);
 	}
 	
 	
-	public Integer validarDigitacao(Usuario usuario) {
+	public Integer validarDigitacao(Cliente cliente) {
 		
-		if ( VariaveisProjeto.digitacaoCampo(usuario.getUsername())) {
+		if ( VariaveisProjeto.digitacaoCampo(cliente.getNome())) {
 			return VariaveisProjeto.NOME_CAMPO_VAZIO;
 		}
 		
@@ -131,8 +133,7 @@ public class UsuarioService extends ConexaoBancoService {
 	
 
 
-	public UsuarioDao getUsuarioDao() {
-		return usuarioDao;
+	public ClienteDao getClienteDao() {
+		return clienteDao;
 	}
-	
 }
