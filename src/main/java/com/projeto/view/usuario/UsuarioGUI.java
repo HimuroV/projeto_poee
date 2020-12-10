@@ -481,11 +481,8 @@ public class UsuarioGUI extends JFrame {
 		
 		toReturn = usuarioService.save(usuario);
 		
-		if (toReturn == VariaveisProjeto.NOME_CAMPO_VAZIO) {
-			status = false;
-			mudaStatusCheckNome();
-			showMensagem("Erro na digitação,verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
-		}
+		erroDigitacao(toReturn);
+		
 		if (toReturn == VariaveisProjeto.ERRO_INCLUSAO) {
 			showMensagem("Erro na inclusão do registro, verifique com seu administrador!", "Erro", JOptionPane.ERROR_MESSAGE);
 		}
@@ -519,11 +516,8 @@ public class UsuarioGUI extends JFrame {
 		
 		toReturn = usuarioService.update(usuario);
 		
-		if (toReturn == VariaveisProjeto.NOME_CAMPO_VAZIO) {
-			status = false;
-			mudaStatusCheckNome();
-			showMensagem("Erro na digitação,verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
-		}
+		erroDigitacao(toReturn);
+		
 		if (toReturn == VariaveisProjeto.ERRO_ALTERACAO) {
 			showMensagem("Erro na alteração do registro, verifique com seu administrador!", "Erro", JOptionPane.ERROR_MESSAGE);
 		}
@@ -531,6 +525,24 @@ public class UsuarioGUI extends JFrame {
 			showMensagem("Alteração do Registro realizada com sucesso!", "OK", JOptionPane.OK_OPTION);
 			limpaTextoCampo();
 			usuario = new Usuario();
+		}
+	}
+
+	private void erroDigitacao(Integer toReturn) {
+		if (toReturn == VariaveisProjeto.USUARIO_USERNAME) {
+			status = false;
+			mudaStatusCheckNome();
+			showMensagem("Erro na digitação do nome, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if (toReturn == VariaveisProjeto.USUARIO_EMAIL) {
+			status = false;
+			mudaStatusCheckNome();
+			showMensagem("Erro na digitação do e-mail, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if (toReturn == VariaveisProjeto.USUARIO_PASSWORD) {
+			status = false;
+			mudaStatusCheckNome();
+			showMensagem("Erro na digitação da senha, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	

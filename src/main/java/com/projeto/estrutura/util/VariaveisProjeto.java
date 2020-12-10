@@ -18,6 +18,13 @@ public class VariaveisProjeto {
 	public static final Integer DIGITACAO_OK = 100;
 	public static final Integer NOME_CAMPO_VAZIO = 200;
 	
+	//Usuário
+	public static final Integer USUARIO_USERNAME = 201;
+	public static final Integer USUARIO_EMAIL = 202;
+	public static final Integer USUARIO_PASSWORD = 203;
+	
+	//Departamento
+	public static final Integer DEPARTAMENTO_NOME = 300;
 	
 	public static final String LIMPA_CAMPO = "";
 	

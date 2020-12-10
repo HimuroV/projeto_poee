@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 
 public class ClienteGUI extends JFrame {
 
-	private static final long serialVersionUID = -2638637223036799312L;
+	private static final long serialVersionUID = 2374618124149828267L;
 	private JPanel contentPane;
 	private JTextField textFieldCodigo;
 	private JTextField textFieldNome;
