@@ -1,9 +1,11 @@
 package com.projeto.view.menu;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -50,6 +52,7 @@ public class Menu extends JFrame {
 		this.login = login;
 		initComponents();
 	}
+	
 	private void initComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1241, 724);
@@ -64,6 +67,7 @@ public class Menu extends JFrame {
 		usuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TabelaUsuario tabelaUsuario = new TabelaUsuario();
+				centralizaForm(tabelaUsuario);
 				contentPane.add(tabelaUsuario);
 				tabelaUsuario.setVisible(true);
 			}
@@ -105,4 +109,10 @@ public class Menu extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 
+	private void centralizaForm(JInternalFrame frame) {
+		Dimension desktopSize = this.getSize();
+		Dimension internalFrameSize = frame.getSize();
+		frame.setLocation((desktopSize.width - internalFrameSize.width) / 2, (desktopSize.height - internalFrameSize.height) /2);
+	}
+	
 }

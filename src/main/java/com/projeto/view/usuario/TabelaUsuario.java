@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableRowSorter;
 
+import com.projeto.estrutura.util.VariaveisProjeto;
 import com.projeto.model.models.Usuario;
 import com.projeto.model.service.UsuarioService;
 
@@ -19,10 +20,12 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -32,6 +35,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyAdapter;
 
 public class TabelaUsuario extends JInternalFrame {
 
@@ -55,16 +59,12 @@ public class TabelaUsuario extends JInternalFrame {
 	private JLabel lblPagina2;
 	private JComboBox<String> comboBox;
 	private JLabel lblPesquisar;
-	private JTextField textField;
+	private JTextField textFieldNome;
 	private JButton btnPesquisar;
 	private JLabel lblPagina;
 	private JLabel lblInicio;
 	private JLabel lblTotal;
 	private JLabel lblFinal;
-	
-	
-	
-	
 	
 	private TabelaUsuarioModel tabelaUsuarioModel;
 	private TableRowSorter<TabelaUsuarioModel> sortTabelaUsuario;
@@ -108,10 +108,23 @@ public class TabelaUsuario extends JInternalFrame {
 		scrollPane = new JScrollPane();
 		
 		btnIncluir = new JButton("Incluir");
+		btnIncluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				incluirUsuario();
+				iniciaPaginacao();
+			}
+		});
 		btnIncluir.setMnemonic(KeyEvent.VK_I);
 		btnIncluir.setIcon(new ImageIcon(TabelaUsuario.class.getResource("/com/projeto/estrutura/imagens/book_add.png")));
 		
 		btnAlterar = new JButton("Alterar");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				alterarUsuario();
+				iniciaPaginacao();
+			}
+
+		});
 		btnAlterar.setMnemonic(KeyEvent.VK_A);
 		btnAlterar.setIcon(new ImageIcon(TabelaUsuario.class.getResource("/com/projeto/estrutura/imagens/book_edit.png")));
 		
@@ -144,10 +157,22 @@ public class TabelaUsuario extends JInternalFrame {
 		
 		lblPesquisar = new JLabel("Pesquisar:");
 		
-		textField = new JTextField();
-		textField.setColumns(10);
+		textFieldNome = new JTextField();
+		textFieldNome.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				String filtro = textFieldNome.getText();
+				filtraNomeUsuario(filtro);
+			}
+		});
+		textFieldNome.setColumns(10);
 		
 		btnPesquisar = new JButton("Pesquisar");
+		btnPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnPesquisar.setMnemonic(KeyEvent.VK_P);
 		btnPesquisar.setToolTipText("Pesquisar usuário cadastrado");
 		btnPesquisar.setIcon(new ImageIcon(TabelaUsuario.class.getResource("/com/projeto/estrutura/imagens/search.png")));
@@ -195,7 +220,7 @@ public class TabelaUsuario extends JInternalFrame {
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(lblPesquisar)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 479, GroupLayout.PREFERRED_SIZE)
+									.addComponent(textFieldNome, GroupLayout.PREFERRED_SIZE, 479, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(btnPesquisar)))))
 					.addContainerGap(30, Short.MAX_VALUE))
@@ -206,7 +231,7 @@ public class TabelaUsuario extends JInternalFrame {
 					.addGap(9)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblPesquisar)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnPesquisar))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE)
@@ -305,6 +330,32 @@ public class TabelaUsuario extends JInternalFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
+	protected void filtraNomeUsuario(String filtro) {
+		RowFilter<TabelaUsuarioModel, Object> rowFilter = null;
+		try {
+			rowFilter = RowFilter.regexFilter(filtro);
+		} catch(PatternSyntaxException e) {
+			return;
+		}
+		sortTabelaUsuario.setRowFilter(rowFilter);
+	}
+
+	private void alterarUsuario() {
+		if(tabelaUsuario.getSelectedRow() != -1 && tabelaUsuario.getSelectedRow() < tabelaUsuarioModel.getRowCount()) {
+			int linha = tabelaUsuario.getSelectedRow();
+			UsuarioGUI usuario = new UsuarioGUI(new JFrame(), true, tabelaUsuario, tabelaUsuarioModel, linha, VariaveisProjeto.ALTERACAO);
+			usuario.setLocationRelativeTo(null);
+			usuario.setVisible(true);
+			
+		}
+	}
+	
+	private void incluirUsuario() {
+		UsuarioGUI usuario = new UsuarioGUI(new JFrame(), true, tabelaUsuario, tabelaUsuarioModel, 0, VariaveisProjeto.INCLUSAO);
+		usuario.setLocationRelativeTo(null);
+		usuario.setResizable(false);
+		usuario.setVisible(true);
+	}
 
 	protected void iniciaPaginacao() {
 		
