@@ -6,31 +6,31 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.projeto.model.models.Usuario;
+import com.projeto.model.models.Departamento;
 
-public class UsuarioDao extends GenericDao<Usuario, Integer >{
+public class DepartamentoDao extends GenericDao<Departamento, Integer >{
 
-	public UsuarioDao(EntityManager entityManager) {
+	public DepartamentoDao(EntityManager entityManager) {
 		super(entityManager);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Usuario> listUsuarioPaginacao(Integer numeroPagina, Integer defaultPagina) {
+	public List<Departamento> listDepartamentoPaginacao(Integer numeroPagina, Integer defaultPagina) {
 		
-		List<Usuario> listaUsuario = new ArrayList<Usuario>();
+		List<Departamento> listaDepartamento = new ArrayList<Departamento>();
 		
 		boolean ativo = true;
 		
-		Query query = this.getEntityManager().createQuery("SELECT u FROM Usuario u "
+		Query query = this.getEntityManager().createQuery("SELECT u FROM Departamento u "
 											+ "LEFT JOIN FETCH u.departamento "
 											+ "LEFT JOIN FETCH u.roles "
 											+ "WHERE u.ativo =:ativo")
 											 .setParameter("ativo", ativo)
 											 .setFirstResult(numeroPagina)
 											 .setMaxResults(defaultPagina);
-		listaUsuario = query.getResultList();
+		listaDepartamento = query.getResultList();
 		
-		return listaUsuario;
+		return listaDepartamento;
 	}
 	
 	

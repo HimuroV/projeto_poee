@@ -1,5 +1,6 @@
 package com.projeto.estrutura.util;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class VariaveisProjeto {
@@ -31,9 +32,64 @@ public class VariaveisProjeto {
 	//Departamento
 	public static final Integer DEPARTAMENTO_NOME = 300;
 	
+	//Cliente
+	public static final Integer CLIENTE_NOME = 400;
+	public static final Integer CLIENTE_TELEFONE = 401;
+	public static final Integer CLIENTE_BAIRRO = 402;
+	public static final Integer CLIENTE_RUA = 403;
+	public static final Integer CLIENTE_NUMERO = 404;
+	
+	//Pedido
+	public static final Integer PEDIDO_DATA = 500;
+	public static final Integer PEDIDO_HORA = 501;
+	public static final Integer PEDIDO_VALOR_TOTAL = 502;
+	public static final Integer PEDIDO_TIPO_PAGAMENTO = 503;
+	public static final Integer PEDIDO_TROCO = 504;
+	
+	//ItemPedido
+	public static final Integer ITEM_PEDIDO_QUANTIDADE = 600;
+	public static final Integer ITEM_PEDIDO_VALOR_UNITARIO = 601;
+	public static final Integer ITEM_PEDIDO_VALOR_TOTAL_ITEM = 602;
+	
+	//Produto
+	public static final Integer PRODUTO_NOME = 700;
+	public static final Integer PRODUTO_VALOR_VENDA = 701;
+	public static final Integer PRODUTO_DESCRICAO = 702;
+	
+	//Ingrediente 
+	public static final Integer INGREDIENTE_NOME = 800;
+	public static final Integer INGREDIENTE_QTDE_ESTOQUE = 801;
+	public static final Integer INGREDIENTE_CUSTO_UNITARIO = 802;
+	
 	public static final String LIMPA_CAMPO = "";
 	
 	public static boolean digitacaoCampo(Integer texto) {
+		
+		if( Objects.isNull(texto)) {
+			return true;
+		}
+		
+		if("".equals(String.valueOf(texto))) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean digitacaoCampo(Date texto) {
+		
+		if( Objects.isNull(texto)) {
+			return true;
+		}
+		
+		if("".equals(String.valueOf(texto))) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean digitacaoCampo(float texto) {
 		
 		if( Objects.isNull(texto)) {
 			return true;

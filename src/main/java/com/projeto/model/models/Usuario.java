@@ -1,9 +1,11 @@
 package com.projeto.model.models;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +28,7 @@ public class Usuario {
 	private boolean admin = false;
 	
 	private Departamento departamento;
-	private List<Role> roles;
+	private Set<Role> roles;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,7 +82,7 @@ public class Usuario {
 
 	// muitos para um
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "DEPARTAMENTO_ID", nullable = false)
 	public Departamento getDepartamento() {
 		return departamento;
@@ -91,14 +93,14 @@ public class Usuario {
     
 	// muitos para muitos
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "TAB_USUARIO_ROLE",
 	     joinColumns = @JoinColumn(name="USUARIO_ID"),
 	     inverseJoinColumns = @JoinColumn(name="ROLE_ID"))
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 	
@@ -132,9 +134,6 @@ public class Usuario {
 		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
 				+ ", ativo=" + ativo + ", admin=" + admin + "]";
 	}
-	
-	
-	
 	
 	
 }

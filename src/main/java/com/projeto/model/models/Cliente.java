@@ -67,7 +67,7 @@ public class Cliente {
 		this.numero = numero;
 	}
 	private String numero;
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -94,8 +94,8 @@ public class Cliente {
 	
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", bairro=" + bairro
-				+ ", rua=" + rua + ", número=" + numero + "]";
+		return "Cliente [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", bairro=" + bairro + ", rua=" + rua
+				+ ", numero=" + numero + "]";
 	}
 	
 }

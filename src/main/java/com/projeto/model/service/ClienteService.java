@@ -121,17 +121,24 @@ private ClienteDao clienteDao;
 	public Integer validarDigitacao(Cliente cliente) {
 		
 		if ( VariaveisProjeto.digitacaoCampo(cliente.getNome())) {
-			return VariaveisProjeto.NOME_CAMPO_VAZIO;
+			return VariaveisProjeto.CLIENTE_NOME;
+		}
+		if ( VariaveisProjeto.digitacaoCampo(cliente.getTelefone())) {
+			return VariaveisProjeto.CLIENTE_TELEFONE;
+		}
+		if ( VariaveisProjeto.digitacaoCampo(cliente.getBairro())) {
+			return VariaveisProjeto.CLIENTE_BAIRRO;
+		}
+		if ( VariaveisProjeto.digitacaoCampo(cliente.getRua())) {
+			return VariaveisProjeto.CLIENTE_RUA;
+		}
+		if ( VariaveisProjeto.digitacaoCampo(cliente.getNumero())) {
+			return VariaveisProjeto.CLIENTE_NUMERO;
 		}
 		
 		return VariaveisProjeto.DIGITACAO_OK;
 	}
 	
-	
-	
-	
-	
-
 
 	public ClienteDao getClienteDao() {
 		return clienteDao;

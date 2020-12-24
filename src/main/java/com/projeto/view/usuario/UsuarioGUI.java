@@ -10,7 +10,9 @@ import javax.swing.border.EmptyBorder;
 import com.projeto.estrutura.util.VariaveisProjeto;
 import com.projeto.model.models.Departamento;
 import com.projeto.model.models.Usuario;
+import com.projeto.model.service.DepartamentoService;
 import com.projeto.model.service.UsuarioService;
+import com.projeto.view.departamento.BuscaDepartamento;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -66,6 +68,8 @@ public class UsuarioGUI extends JDialog {
 	private JLabel lblDepartamento;
 	private JTextField textFieldNomeDepartamento;
 	private JButton btnNewButton;
+	
+	private Departamento departamento;
 	
 	/**
 	 * Launch the application.
@@ -315,7 +319,9 @@ public class UsuarioGUI extends JDialog {
 		btnNewButton.setToolTipText("Buscar Departamento");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				buscaDepartamento();
 			}
+
 		});
 		btnNewButton.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/search.png")));
 
@@ -421,6 +427,20 @@ public class UsuarioGUI extends JDialog {
 		 */
 	}
 	
+	protected void buscaDepartamento() {
+		departamento = new Departamento();
+		BuscaDepartamento buscaDepartamento = new BuscaDepartamento(new JFrame(), true);
+		buscaDepartamento.setLocationRelativeTo(null);
+		buscaDepartamento.setVisible(true);
+		
+		if(buscaDepartamento.isSelectDepartamento()) {
+			DepartamentoService departamentoService = new DepartamentoService();
+			departamento = departamentoService.findById(buscaDepartamento.getCodigoDepartamento()); 
+			textFieldNomeDepartamento.setText(departamento.getNome());
+		}
+		
+		
+	}
 	
 	private boolean verificaDigitacaoDoNome() {
 
@@ -523,11 +543,6 @@ public class UsuarioGUI extends JDialog {
 		
 		Usuario usuario = pegarDadosUsuario();
 		
-		Departamento departamento = new Departamento();
-		
-		departamento.setId(1L);
-		departamento.setNome("Vendas");
-		
 		UsuarioService usuarioService = new UsuarioService();
 		
 		toReturn = usuarioService.delete(usuario);
@@ -548,11 +563,7 @@ public class UsuarioGUI extends JDialog {
 		Integer toReturn = 0; 
 		
 		Usuario usuario = pegarDadosUsuario();
-		
-		Departamento departamento = new Departamento();
-		
-		departamento.setId(1L);
-				
+								
 		usuario.setDepartamento(departamento);
 		
 		UsuarioService usuarioService = new UsuarioService();
@@ -585,11 +596,7 @@ public class UsuarioGUI extends JDialog {
 		Integer toReturn = 0;
 		
 		Usuario usuario = pegarDadosUsuario();
-		
-		Departamento departamento = new Departamento();
-		
-		departamento.setId(1L);
-		
+					
 		usuario.setDepartamento(departamento);
 			
 		UsuarioService usuarioService = new UsuarioService();
@@ -654,6 +661,9 @@ public class UsuarioGUI extends JDialog {
 		textFieldEmail.setText(usuario.getEmail());
 		passwordFieldSenha.setText(usuario.getPassword());
 		
+		textFieldNomeDepartamento.setText(usuario.getDepartamento().getNome());
+		
+		System.out.println(" roles"+usuario.getRoles());
 		if(usuario.isAdmin()) {
 			rdbtnAdmin.setSelected(true);
 		}
@@ -683,6 +693,8 @@ public class UsuarioGUI extends JDialog {
 		usuario.setUsername(textFieldNome.getText());
 		usuario.setEmail(textFieldEmail.getText());
 		usuario.setPassword(passwordFieldSenha.getText());
+		usuario.setDepartamento(departamento);
+		
 		
 	    if(rdbtnAtivo.isSelected()) {
 	    	usuario.setAtivo(true);
@@ -706,6 +718,7 @@ public class UsuarioGUI extends JDialog {
 		textFieldNome.setText(VariaveisProjeto.LIMPA_CAMPO);
 		textFieldEmail.setText(VariaveisProjeto.LIMPA_CAMPO);
 		passwordFieldSenha.setText(VariaveisProjeto.LIMPA_CAMPO);
+		textFieldNomeDepartamento.setText(VariaveisProjeto.LIMPA_CAMPO);
 		rdbtnAdmin.setSelected(false);
 		rdbtnAtivo.setSelected(false);
 	}
