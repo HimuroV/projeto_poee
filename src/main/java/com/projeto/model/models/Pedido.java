@@ -1,6 +1,6 @@
 package com.projeto.model.models;
 
-import java.util.Date;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +14,11 @@ import javax.persistence.Table;
 public class Pedido {
 	
 	private Integer id;
-	private Date data; 
-	private Date hora;
-	private float valor_total;
+	private String data; 
+	private String hora;
+	private double valor_total;
 	private String tipo_pagamento;
-	private float troco;
+	private double troco;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,28 +30,28 @@ public class Pedido {
 		this.id = id;
 	}
 	
-	@Column(name = "PEDIDO_DATA", nullable = false )
-	public Date getData() {
+	@Column(name = "PEDIDO_DATA", length = 10, nullable = false )
+	public String getData() {
 		return data;
 	}
-	public void setData(Date data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 	
-	@Column(name = "PEDIDO_HORA", nullable = false )
-	public Date getHora() {
+	@Column(name = "PEDIDO_HORA",length = 10, nullable = false )
+	public String getHora() {
 		return hora;
 	}
-	public void setHora(Date hora) {
-		this.hora = hora;
+	public void setHora(String string) {
+		this.hora = string;
 	}
 	
 	@Column(name = "PEDIDO_VALOR_TOTAL", nullable = false )
-	public Float getValor_total() {
+	public double getValor_total() {
 		return valor_total;
 	}
-	public void setValor_total(Float valor_total) {
-		this.valor_total = valor_total;
+	public void setValor_total(double d) {
+		this.valor_total = d;
 	}
 	
 	@Column(name = "PEDIDO_TIPO_PAGAMENTO", length = 10, nullable = false )
@@ -63,11 +63,11 @@ public class Pedido {
 	}
 	
 	@Column(name = "PEDIDO_TROCO", nullable = true )
-	public float getTroco() {
+	public double getTroco() {
 		return troco;
 	}
-	public void setTroco(float troco) {
-		this.troco = troco;
+	public void setTroco(double d) {
+		this.troco = d;
 	}
 	
 	@Override

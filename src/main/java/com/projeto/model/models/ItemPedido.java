@@ -13,8 +13,8 @@ public class ItemPedido {
 	
 	private Integer id;
 	private Integer quantidade;
-	private float valor_unitario;
-	private float valor_total_item;
+	private double valor_unitario;
+	private double valor_total_item;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,19 +35,19 @@ public class ItemPedido {
 	}
 	
 	@Column(name = "ITEM_PEDIDO_VALOR_UNITARIO", nullable = false )
-	public float getValor_unitario() {
+	public double getValor_unitario() {
 		return valor_unitario;
 	}
-	public void setValor_unitario(float valor_unitario) {
+	public void setValor_unitario(double valor_unitario) {
 		this.valor_unitario = valor_unitario;
 	}
 	
 	@Column(name = "ITEM_PEDIDO_VALOR_TOTAL_ITEM", nullable = false )
-	public float getValor_total_item() {
+	public double getValor_total_item() {
 		return valor_total_item;
 	}
-	public void setValor_total_item(float valor_total_item) {
-		this.valor_total_item = valor_total_item;
+	public void setValor_total_item(double d) {
+		this.valor_total_item = d;
 	}
 	
 	@Override

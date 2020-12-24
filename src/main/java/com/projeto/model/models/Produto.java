@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class Produto {
 	private Integer id;
 	private String nome;
-	private float valor_venda;
+	private double valor_venda;
 	private String descricao;
 	
 	@Id
@@ -34,11 +34,11 @@ public class Produto {
 	}
 	
 	@Column(name = "PRODUTO_VALOR_VENDA", nullable = false )
-	public float getValor_venda() {
+	public double getValor_venda() {
 		return valor_venda;
 	}
-	public void setValor_venda(float valor_venda) {
-		this.valor_venda = valor_venda;
+	public void setValor_venda(double d) {
+		this.valor_venda = d;
 	}
 	
 	@Column(name = "PRODUTO_DESCRICAO", length = 200, nullable = false )

@@ -76,20 +76,8 @@ public class VariaveisProjeto {
 		return false;
 	}
 	
-	public static boolean digitacaoCampo(Date texto) {
-		
-		if( Objects.isNull(texto)) {
-			return true;
-		}
-		
-		if("".equals(String.valueOf(texto))) {
-			return true;
-		}
-		
-		return false;
-	}
 	
-	public static boolean digitacaoCampo(float texto) {
+	public static boolean digitacaoCampo(double texto) {
 		
 		if( Objects.isNull(texto)) {
 			return true;

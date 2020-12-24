@@ -13,7 +13,7 @@ public class Ingrediente {
 	private Integer id;
 	private String nome;
 	private Integer qtde_estoque;
-	private float custo_unitario;
+	private double custo_unitario;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,11 +42,11 @@ public class Ingrediente {
 	}
 	
 	@Column(name = "INGREDIENTE_CUSTO_UNITARIO", nullable = false )
-	public float getCusto_unitario() {
+	public double getCusto_unitario() {
 		return custo_unitario;
 	}
-	public void setCusto_unitario(float custo_unitario) {
-		this.custo_unitario = custo_unitario;
+	public void setCusto_unitario(double d) {
+		this.custo_unitario = d;
 	}
 	@Override
 	public int hashCode() {
