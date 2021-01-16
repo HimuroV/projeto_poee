@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_usuario_sql" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0422c4e9-a9b2-4f79-8e78-d867b08bd113">
+	<property name="com.jaspersoft.studio.data.sql.tables">
+		<![CDATA[cHJvamV0by50YWJfY2xpZW50ZSBBUyAsMTY1LDgyLGE5MTc0OWZkLTE3MjgtNDRlMy1iNTFiLWZj
+ZjM3OWIxZGM1OTs=]]>
+	</property>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MYSQL_CONNECTIONS"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT projeto.tab_cliente.`CLIENTE_ID`,
+	projeto.tab_cliente.`CLIENTE_TELEFONE`,
+	projeto.tab_cliente.`CLIENTE_NOME`,
+	projeto.tab_cliente.`CLIENTE_BAIRRO`,
+	projeto.tab_cliente.`CLIENTE_RUA`,
+	projeto.tab_cliente.`CLIENTE_NUMERO`
+FROM projeto.tab_cliente]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,6 +1,5 @@
 package com.projeto.estrutura.util;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class VariaveisProjeto {
@@ -8,10 +7,17 @@ public class VariaveisProjeto {
 	
 	public static final String PERSISTENCE_UNIT_NAME = "projeto";
 	
+	//Configurações para a geração de relatório
+	public static final String DIRETORIO_RELATORIO = "reports/";
+	public static final String SUFIXO_RELATORIO_COMPILADO = ".jasper";
+	public static final String SUFIXO_RELATORIO_FONTE = ".jrxml";
+	
+	public static final String UPLOAD_DIR = "/nds/upload";
+	
 	public static final Integer INCLUSAO = 1;
 	public static final Integer ALTERACAO = 2;
 	public static final Integer EXCLUSAO = 3;
-	public static final Integer CONSULTA =4;
+	public static final Integer CONSULTA = 4;
 	
 	public static final Integer ERRO_INCLUSAO = 10;
 	public static final Integer ERRO_ALTERACAO = 20;

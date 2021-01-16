@@ -34,6 +34,7 @@ public class Menu extends JFrame {
 	private Login login;
 	private JMenu sair;
 	private JMenuItem sair_sistema;
+	private JMenuItem Cliente;
 
 	/**
 	 * Launch the application.
@@ -72,6 +73,9 @@ public class Menu extends JFrame {
 				tabelaUsuario.setVisible(true);
 			}
 		});
+		
+		Cliente = new JMenuItem("Cliente");
+		arquivo.add(Cliente);
 		arquivo.add(usuario);
 		
 		logout = new JMenuItem("Logout");

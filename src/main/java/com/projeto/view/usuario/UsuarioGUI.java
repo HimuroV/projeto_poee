@@ -8,22 +8,29 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.projeto.estrutura.util.VariaveisProjeto;
+import com.projeto.estrutura.util.imagem.ImageFilter;
+import com.projeto.estrutura.util.imagem.ImagePreview;
 import com.projeto.model.models.Departamento;
+import com.projeto.model.models.Foto;
 import com.projeto.model.models.Usuario;
 import com.projeto.model.service.DepartamentoService;
+import com.projeto.model.service.LocalFotoStorageService;
 import com.projeto.model.service.UsuarioService;
 import com.projeto.view.departamento.BuscaDepartamento;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -32,15 +39,18 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Objects;
+
 import javax.swing.ImageIcon;
+import javax.swing.border.BevelBorder;
 
 public class UsuarioGUI extends JDialog {
-
 	
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2638637223036799312L;
 	private JPanel contentPane;
 	private JTextField textFieldNome;
@@ -70,20 +80,14 @@ public class UsuarioGUI extends JDialog {
 	private JButton btnNewButton;
 	
 	private Departamento departamento;
+	private JPanel panel;
+	private JButton btnNewButton_1;
+	private JLabel lblIconFoto;
+	private JButton btnFoto;
+	private JButton btnFecharFoto;
 	
-	/**
-	 * Launch the application.
-	 */
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { UsuarioGUI frame = new UsuarioGUI();
-	 * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
-	 * }
-	 */
-
-	/**
-	 * Create the frame.
-	 */
+	private String nomeFoto;
+	
 	public UsuarioGUI(JFrame frame, boolean modal, JTable tabelaUsuario, TabelaUsuarioModel tabelaUsuarioModel, int linha, int acao) {
 		
 		super(frame, modal);
@@ -128,7 +132,7 @@ public class UsuarioGUI extends JDialog {
 	private void initComponents() {
 		setTitle("Cadastro de Usuário");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 644, 391);
+		setBounds(100, 100, 867, 391);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -324,6 +328,28 @@ public class UsuarioGUI extends JDialog {
 
 		});
 		btnNewButton.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/search.png")));
+		
+		panel = new JPanel();
+		panel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		
+		lblIconFoto = new JLabel("");
+		
+		btnFoto = new JButton("");
+		btnFoto.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/class.png")));
+		btnFoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				carregarFoto();
+			}
+
+		});
+		
+		btnFecharFoto = new JButton("");
+		btnFecharFoto.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
+		btnFecharFoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				excluirFoto();
+			}
+		});
 
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -353,7 +379,8 @@ public class UsuarioGUI extends JDialog {
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addComponent(btnExcluir)
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(btnSair))))))
+											.addComponent(btnSair)))))
+							.addPreferredGap(ComponentPlacement.RELATED, 133, Short.MAX_VALUE))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(46)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -363,68 +390,154 @@ public class UsuarioGUI extends JDialog {
 								.addComponent(lblNome))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(passwordFieldSenha, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-								.addComponent(textFieldEmail, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-								.addComponent(textFieldNome, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+								.addComponent(passwordFieldSenha, GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+								.addComponent(textFieldEmail, GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+								.addComponent(textFieldNome, GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(textFieldNomeDepartamento, GroupLayout.PREFERRED_SIZE, 253, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(btnNewButton)))))
-					.addGap(58)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(checkSenha, 0, 0, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(checkEmail, 0, 0, Short.MAX_VALUE)
-							.addComponent(checkNome, GroupLayout.PREFERRED_SIZE, 16, Short.MAX_VALUE)))
-					.addGap(96))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(checkSenha, 0, 0, Short.MAX_VALUE)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(checkEmail, 0, 0, Short.MAX_VALUE)
+									.addComponent(checkNome, GroupLayout.PREFERRED_SIZE, 16, Short.MAX_VALUE)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblIconFoto, GroupLayout.PREFERRED_SIZE, 188, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnFoto)
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnFecharFoto)))
+					.addContainerGap(68, GroupLayout.PREFERRED_SIZE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
-						.addComponent(textFieldCodigo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(checkNome, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNome)
-						.addComponent(textFieldNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(18)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNewLabel)
+								.addComponent(textFieldCodigo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(checkNome, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNome)
+								.addComponent(textFieldNome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(checkEmail, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblEmail)
+								.addComponent(textFieldEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(lblSenha)
+									.addComponent(passwordFieldSenha, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(checkSenha, 0, 0, Short.MAX_VALUE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblIconFoto, GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(checkEmail, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblEmail)
-						.addComponent(textFieldEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(checkSenha, 0, 0, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblSenha)
-							.addComponent(passwordFieldSenha, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblDepartamento)
-							.addComponent(textFieldNomeDepartamento, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnNewButton))
-					.addGap(34)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(rdbtnAtivo)
-						.addComponent(rdbtnAdmin))
-					.addGap(31)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAlterar)
-						.addComponent(btnExcluir)
-						.addComponent(btnSair)
-						.addComponent(btnIncluir))
-					.addContainerGap(74, Short.MAX_VALUE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(lblDepartamento)
+									.addComponent(textFieldNomeDepartamento, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(btnNewButton)
+									.addComponent(btnFoto)))
+							.addGap(34)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(rdbtnAtivo)
+								.addComponent(rdbtnAdmin))
+							.addGap(31)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(btnAlterar)
+									.addComponent(btnExcluir)
+									.addComponent(btnSair)
+									.addComponent(btnIncluir))
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(btnFecharFoto))
+					.addContainerGap(56, Short.MAX_VALUE))
 		);
+		
+		btnNewButton_1 = new JButton("Relatório");
+		btnNewButton_1.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/pdf.png")));
+		btnNewButton_1.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				imprimeRelatorio();
+			}
+
+			
+		});
+		panel.add(btnNewButton_1);
 		contentPane.setLayout(gl_contentPane);
 		
 		/*
 		 * btnAlterar.setEnabled(false); btnIncluir.setEnabled(false);
 		 * btnExcluir.setEnabled(false);
 		 */
+	}
+	
+	protected void excluirFoto() {
+		Usuario usuario = tabelaUsuarioModel.getUsuario(this.linha);
+		nomeFoto = usuario.getFoto();
+		LocalFotoStorageService localFotoStorageService = new LocalFotoStorageService();
+		localFotoStorageService.remover(nomeFoto);
+		lblIconFoto.setIcon(null);
+		lblIconFoto.revalidate();
+		
+	}
+
+
+	private void carregarFoto() {
+		
+		JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(new ImageFilter());
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.setAccessory(new ImagePreview(fc));
+		int returnVal = fc.showDialog(lblIconFoto, "Anexar");
+		
+		if(lblIconFoto.getIcon() != null) {
+			excluirFoto();
+		}
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				File file = fc.getSelectedFile();
+				FileInputStream fin = new FileInputStream(file);
+				BufferedImage img = ImageIO.read(fin);
+				ImageIcon icon = new ImageIcon(img);
+				lblIconFoto.setIcon(icon);
+				lblIconFoto.setHorizontalAlignment(SwingConstants.CENTER);
+				LocalFotoStorageService localFotoStorageService = new LocalFotoStorageService();
+				Foto foto = new Foto();
+				foto.setNomeArquivo(file.getName());
+				foto.setInputStream(fin);
+				foto.setFile(file);
+				nomeFoto = localFotoStorageService.armazenar(foto);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	private void imprimeRelatorio() {       //esse n é aqui, é na tabela :p
+		RelUsuario relUsuario = new RelUsuario(new JFrame(), true);
+		relUsuario.setLocationRelativeTo(null);
+		setVisible(false);
+		relUsuario.setVisible(true);
 	}
 	
 	protected void buscaDepartamento() {
@@ -563,8 +676,6 @@ public class UsuarioGUI extends JDialog {
 		Integer toReturn = 0; 
 		
 		Usuario usuario = pegarDadosUsuario();
-								
-		usuario.setDepartamento(departamento);
 		
 		UsuarioService usuarioService = new UsuarioService();
 		
@@ -596,8 +707,6 @@ public class UsuarioGUI extends JDialog {
 		Integer toReturn = 0;
 		
 		Usuario usuario = pegarDadosUsuario();
-					
-		usuario.setDepartamento(departamento);
 			
 		UsuarioService usuarioService = new UsuarioService();
 		
@@ -640,30 +749,33 @@ public class UsuarioGUI extends JDialog {
 		
 		Usuario usuario = new Usuario();
 				
-		/*
-		 * if(VariaveisProjeto.digitacaoCampo(textFieldCodigo.getText())) {
-		 * textFieldCodigo.requestFocus(); return; }
-		 * 
-		 * 
-		 * Integer id = Integer.valueOf(textFieldCodigo.getText());
-		 */
-		
 		usuario = tabelaUsuarioModel.getUsuario(this.linha);
-		
-		System.out.println(usuario.toString());
-		
-		//UsuarioService usuarioService = new UsuarioService();
-		
-		//usuario = usuarioService.findById(usuario.getId());
 		
 		textFieldCodigo.setText(String.valueOf(usuario.getId()));
 		textFieldNome.setText(usuario.getUsername());
 		textFieldEmail.setText(usuario.getEmail());
 		passwordFieldSenha.setText(usuario.getPassword());
-		
 		textFieldNomeDepartamento.setText(usuario.getDepartamento().getNome());
+		nomeFoto = usuario.getFoto();
+		departamento = new Departamento();
+		departamento.setId(usuario.getDepartamento().getId());
+		departamento.setNome(usuario.getDepartamento().getNome());
 		
-		System.out.println(" roles"+usuario.getRoles());
+		if (!Objects.isNull(nomeFoto)) {
+			LocalFotoStorageService localFotoStorageService = new LocalFotoStorageService();
+			String fileInput = localFotoStorageService.recuperar(nomeFoto);
+			File file = new File(fileInput);
+			FileInputStream fis;
+			try {
+				fis = new FileInputStream(file);
+				BufferedImage img = ImageIO.read(fis);
+				ImageIcon imagem = new ImageIcon(img);
+				lblIconFoto.setIcon(imagem);
+				lblIconFoto.setHorizontalAlignment(SwingConstants.CENTER);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		if(usuario.isAdmin()) {
 			rdbtnAdmin.setSelected(true);
 		}
@@ -694,6 +806,7 @@ public class UsuarioGUI extends JDialog {
 		usuario.setEmail(textFieldEmail.getText());
 		usuario.setPassword(passwordFieldSenha.getText());
 		usuario.setDepartamento(departamento);
+		usuario.setFoto(nomeFoto);
 		
 		
 	    if(rdbtnAtivo.isSelected()) {

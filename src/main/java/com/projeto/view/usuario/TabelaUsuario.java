@@ -73,6 +73,7 @@ public class TabelaUsuario extends JInternalFrame {
 	private Integer defaultPagina = 5;
 	private Integer totalPagina = 1;
 	private Integer numeroPagina = 1;
+	private JButton Relatorio;
 	
 
 	/**
@@ -184,6 +185,17 @@ public class TabelaUsuario extends JInternalFrame {
 		lblTotal = new JLabel("total");
 		
 		lblFinal = new JLabel("50");
+		
+		Relatorio = new JButton("Relatório");
+		Relatorio.setIcon(new ImageIcon(TabelaUsuario.class.getResource("/com/projeto/estrutura/imagens/pdf.png")));
+		Relatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RelUsuario relUsuario = new RelUsuario(new JFrame(), true);
+				relUsuario.setLocationRelativeTo(null);
+				setVisible(false);
+				relUsuario.setVisible(true);
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -210,19 +222,21 @@ public class TabelaUsuario extends JInternalFrame {
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 727, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblPesquisar)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(textFieldNome, GroupLayout.PREFERRED_SIZE, 479, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnPesquisar))
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(btnIncluir)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(btnAlterar)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(btnExcluir)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnSair))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblPesquisar)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(textFieldNome, GroupLayout.PREFERRED_SIZE, 479, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnPesquisar)))))
+									.addComponent(btnSair)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(Relatorio)))))
 					.addContainerGap(30, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -235,7 +249,7 @@ public class TabelaUsuario extends JInternalFrame {
 						.addComponent(btnPesquisar))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 342, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -248,13 +262,14 @@ public class TabelaUsuario extends JInternalFrame {
 								.addComponent(btnSair)
 								.addComponent(btnExcluir)
 								.addComponent(btnAlterar)
-								.addComponent(btnIncluir)))
+								.addComponent(btnIncluir)
+								.addComponent(Relatorio)))
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblPagina)
 							.addComponent(lblInicio)
 							.addComponent(lblTotal)
 							.addComponent(lblFinal)))
-					.addContainerGap(68, Short.MAX_VALUE))
+					.addContainerGap(64, Short.MAX_VALUE))
 		);
 		
 		btnPrimeiro = new JButton("");

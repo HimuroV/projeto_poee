@@ -30,6 +30,8 @@ public class Usuario {
 	private Departamento departamento;
 	private Set<Role> roles;
 	
+	private String foto;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USUARIO_ID")
@@ -102,6 +104,14 @@ public class Usuario {
 	}
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	
+	@Column(name="USUARIO_FOTO", nullable = true)
+	public String getFoto() {
+		return foto;
+	}
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 	
 	@Override
