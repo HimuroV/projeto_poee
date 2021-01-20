@@ -21,6 +21,7 @@ public class Cliente {
 	private String bairro;
 	private String rua;
 	private String numero;
+	private String foto;
 	
 	private List<Pedido> pedido;
 	
@@ -84,6 +85,15 @@ public class Cliente {
 	}
 	public void setNumero(String numero) {
 		this.numero = numero;
+	}
+	
+	@Column(name="CLIENTE_FOTO", nullable = true)
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 	
 	//um para muitos
