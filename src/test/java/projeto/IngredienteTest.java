@@ -18,7 +18,7 @@ public class IngredienteTest {
 				//ingrediente.setId(2);
 				ingrediente.setNome("Tomate");
 				ingrediente.setCusto_unitario(0.50);
-				ingrediente.setQtde_estoque(50);
+				ingrediente.setQuantidade_estoque(50);
 				
 				IngredienteService ingredienteService = new IngredienteService();
 				
@@ -33,7 +33,7 @@ public class IngredienteTest {
 				//ingrediente.setId(2);
 				ingrediente.setNome("Pão");
 				ingrediente.setCusto_unitario(0.15);
-				ingrediente.setQtde_estoque(85);
+				ingrediente.setQuantidade_estoque(85);
 				
 				IngredienteService ingredienteService1 = new IngredienteService();
 				
@@ -61,7 +61,7 @@ public class IngredienteTest {
 				
 				System.out.print(ingrediente.toString());
 				
-				ingrediente.setQtde_estoque(45);
+				ingrediente.setQuantidade_estoque(45);
 				
 				ingredienteService.update(ingrediente);
 						

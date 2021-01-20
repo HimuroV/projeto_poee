@@ -28,7 +28,7 @@ public class ItemPedidoService extends ConexaoBancoService {
 				trx.begin();
 				this.getItemPedidoDao().save(itempedido);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.INCLUSAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -53,14 +53,15 @@ public class ItemPedidoService extends ConexaoBancoService {
 		
 		EntityTransaction trx = this.getTransaction();
 		
-		if ( validarDigitacao(itempedido) == VariaveisProjeto.DIGITACAO_OK) {
+		toReturn = validarDigitacao(itempedido);
+		if (  toReturn == VariaveisProjeto.DIGITACAO_OK) {
 		
 			try {
 			
 				trx.begin();
 				this.getItemPedidoDao().update(itempedido);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.ALTERACAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -72,10 +73,7 @@ public class ItemPedidoService extends ConexaoBancoService {
 				this.close();
 			}
 		
-		}else {
-			toReturn = VariaveisProjeto.NOME_CAMPO_VAZIO;
 		}
-		
 		return toReturn;
 	}
 	
@@ -92,7 +90,7 @@ public class ItemPedidoService extends ConexaoBancoService {
 			ItemPedido itempedidoEncontrado = this.getItemPedidoDao().findById(itempedido.getId());
 			this.getItemPedidoDao().remove(itempedidoEncontrado);
 			trx.commit();
-
+			toReturn = VariaveisProjeto.EXCLUSAO_REALIZADA;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if ( trx.isActive() ) {
@@ -133,5 +131,14 @@ public class ItemPedidoService extends ConexaoBancoService {
 	
 	public ItemPedidoDao getItemPedidoDao() {
 		return itempedidoDao;
+	}
+	
+	public Integer countTotalRegister() {
+		return itempedidoDao.countTotalRegister(ItemPedido.class);
+	}
+
+	public List<ItemPedido> listItemPedidoPaginacao(Integer numeroPagina, Integer defaultPagina) {
+		
+		return itempedidoDao.listItemPedidoPaginacao(numeroPagina,defaultPagina);
 	}
 }

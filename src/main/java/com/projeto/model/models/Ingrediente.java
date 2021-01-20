@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class Ingrediente {
 	private Integer id;
 	private String nome;
-	private Integer qtde_estoque;
+	private Integer quantidade_estoque;
 	private double custo_unitario;
 	
 	@Id
@@ -34,11 +34,11 @@ public class Ingrediente {
 	}
 	
 	@Column(name = "INGREDIENTE_QTDE_ESTOQUE", nullable = false )
-	public Integer getQtde_estoque() {
-		return qtde_estoque;
+	public Integer getQuantidade_estoque() {
+		return quantidade_estoque;
 	}
-	public void setQtde_estoque(Integer qtde_estoque) {
-		this.qtde_estoque = qtde_estoque;
+	public void setQuantidade_estoque(Integer quantidade_estoque) {
+		this.quantidade_estoque = quantidade_estoque;
 	}
 	
 	@Column(name = "INGREDIENTE_CUSTO_UNITARIO", nullable = false )
@@ -74,7 +74,7 @@ public class Ingrediente {
 	
 	@Override
 	public String toString() {
-		return "Ingrediente [id=" + id + ", nome=" + nome + ", qtde_estoque=" + qtde_estoque + ", custo_unitario="
+		return "Ingrediente [id=" + id + ", nome=" + nome + ", qtde_estoque=" + quantidade_estoque + ", custo_unitario="
 				+ custo_unitario + "]";
 	}
 	

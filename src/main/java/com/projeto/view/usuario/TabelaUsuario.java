@@ -130,6 +130,12 @@ public class TabelaUsuario extends JInternalFrame {
 		btnAlterar.setIcon(new ImageIcon(TabelaUsuario.class.getResource("/com/projeto/estrutura/imagens/book_edit.png")));
 		
 		btnExcluir = new JButton("Excluir");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				excluirUsuario();
+				iniciaPaginacao();
+			}
+		});
 		btnExcluir.setMnemonic(KeyEvent.VK_E);
 		btnExcluir.setIcon(new ImageIcon(TabelaUsuario.class.getResource("/com/projeto/estrutura/imagens/book_delete.png")));
 		
@@ -370,6 +376,16 @@ public class TabelaUsuario extends JInternalFrame {
 		usuario.setLocationRelativeTo(null);
 		usuario.setResizable(false);
 		usuario.setVisible(true);
+	}
+	
+	private void excluirUsuario() {
+		if(tabelaUsuario.getSelectedRow() != -1 && tabelaUsuario.getSelectedRow() < tabelaUsuarioModel.getRowCount()) {
+			int linha = tabelaUsuario.getSelectedRow();
+			UsuarioGUI usuario = new UsuarioGUI(new JFrame(), true, tabelaUsuario, tabelaUsuarioModel, linha, VariaveisProjeto.EXCLUSAO);
+			usuario.setLocationRelativeTo(null);
+			usuario.setVisible(true);
+			
+		}
 	}
 
 	protected void iniciaPaginacao() {

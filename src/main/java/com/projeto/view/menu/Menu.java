@@ -10,6 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.projeto.main.Login;
+import com.projeto.view.ItemPedido.TabelaItemPedido;
+import com.projeto.view.cliente.TabelaCliente;
+import com.projeto.view.ingrediente.TabelaIngrediente;
+import com.projeto.view.pedido.TabelaPedido;
+import com.projeto.view.produto.TabelaProduto;
 import com.projeto.view.usuario.TabelaUsuario;
 
 import javax.swing.GroupLayout;
@@ -35,20 +40,11 @@ public class Menu extends JFrame {
 	private JMenu sair;
 	private JMenuItem sair_sistema;
 	private JMenuItem Cliente;
+	private JMenuItem Pedido;
+	private JMenuItem ItemPedido;
+	private JMenuItem Produto;
+	private JMenuItem Ingrediente;
 
-	/**
-	 * Launch the application.
-	 */
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { Menu frame = new Menu();
-	 * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
-	 * }
-	 */
-
-	/**
-	 * Create the frame.
-	 */
 	public Menu(Login login) {
 		this.login = login;
 		initComponents();
@@ -75,7 +71,59 @@ public class Menu extends JFrame {
 		});
 		
 		Cliente = new JMenuItem("Cliente");
+		Cliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabelaCliente tabelaCliente = new TabelaCliente();
+				centralizaForm(tabelaCliente);
+				contentPane.add(tabelaCliente);
+				tabelaCliente.setVisible(true);
+			}
+		});
 		arquivo.add(Cliente);
+		
+		Pedido = new JMenuItem("Pedido");
+		Pedido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabelaPedido tabelaPedido = new TabelaPedido();
+				centralizaForm(tabelaPedido);
+				contentPane.add(tabelaPedido);
+				tabelaPedido.setVisible(true);
+			}
+		});
+		arquivo.add(Pedido);
+		
+		ItemPedido = new JMenuItem("Item Pedido");
+		ItemPedido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabelaItemPedido tabelaItemPedido = new TabelaItemPedido();
+				centralizaForm(tabelaItemPedido);
+				contentPane.add(tabelaItemPedido);
+				tabelaItemPedido.setVisible(true);
+			}
+		});
+		arquivo.add(ItemPedido);
+		
+		Produto = new JMenuItem("Produto");
+		Produto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabelaProduto tabelaProduto = new TabelaProduto();
+				centralizaForm(tabelaProduto);
+				contentPane.add(tabelaProduto);
+				tabelaProduto.setVisible(true);
+			}
+		});
+		arquivo.add(Produto);
+		
+		Ingrediente = new JMenuItem("Ingrediente");
+		Ingrediente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabelaIngrediente tabelaIngrediente = new TabelaIngrediente();
+				centralizaForm(tabelaIngrediente);
+				contentPane.add(tabelaIngrediente);
+				tabelaIngrediente.setVisible(true);
+			}
+		});
+		arquivo.add(Ingrediente);
 		arquivo.add(usuario);
 		
 		logout = new JMenuItem("Logout");

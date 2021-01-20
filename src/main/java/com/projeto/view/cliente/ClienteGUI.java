@@ -1,26 +1,29 @@
-package com.projeto.view;
+package com.projeto.view.cliente;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import com.projeto.estrutura.util.VariaveisProjeto;
 import com.projeto.model.models.Cliente;
-import com.projeto.model.models.Usuario;
 import com.projeto.model.service.ClienteService;
-import com.projeto.model.service.UsuarioService;
-import com.projeto.view.usuario.UsuarioGUI;
+import com.projeto.view.cliente.TabelaClienteModel;
+import com.projeto.view.cliente.ClienteGUI;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.FocusAdapter;
@@ -28,7 +31,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ClienteGUI extends JFrame {
+public class ClienteGUI extends JDialog {
 
 	private static final long serialVersionUID = 2374618124149828267L;
 	private JPanel contentPane;
@@ -49,28 +52,54 @@ public class ClienteGUI extends JFrame {
 	private JLabel checkRua;
 	private JLabel checkNumero;
 	
+	private JTable tabelaCliente;
+	private TabelaClienteModel tabelaClienteModel;
+	private int linha = 0;
+	private int acao = 0;
+	
 	private boolean status = true;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClienteGUI frame = new ClienteGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	
+	public ClienteGUI(JFrame frame, boolean modal, JTable tabelaCliente, TabelaClienteModel tabelaClienteModel, int linha, int acao) {
+		
+		super(frame, modal);
+		
+		initComponents();
+		
+		this.tabelaCliente = tabelaCliente;
+		this.tabelaClienteModel = tabelaClienteModel;
+		this.linha = linha;
+		this.acao = acao;
+				
+		limpaTextoCampo();
+		
+		desabilitaCheckCampos();
+		
+		configuraAcaoCliente();
+		
 	}
-
-	/**
-	 * Create the frame.
-	 */
-	public ClienteGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+	private void configuraAcaoCliente() {
+		
+		if (this.acao == VariaveisProjeto.INCLUSAO) {
+			btnIncluir.setVisible(true);
+			btnAlterar.setVisible(false);
+			btnExcluir.setVisible(false);
+		}
+		if (this.acao == VariaveisProjeto.ALTERACAO) {
+			btnAlterar.setVisible(true);
+			btnExcluir.setVisible(false);
+			btnIncluir.setVisible(false);
+			buscarCliente();
+		}
+		if (this.acao == VariaveisProjeto.EXCLUSAO) {
+			btnExcluir.setVisible(true);
+			btnIncluir.setVisible(false);
+			btnAlterar.setVisible(false);
+			buscarCliente();
+		}
+	}
+	
+	private void initComponents() {
 		setBounds(100, 100, 520, 317);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -79,10 +108,11 @@ public class ClienteGUI extends JFrame {
 		JLabel lblNewLabel = new JLabel("Código");
 		
 		textFieldCodigo = new JTextField();
+		textFieldCodigo.setEditable(false);
 		textFieldCodigo.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				buscarCliente();
+				//buscarCliente();
 			}
 		});
 		textFieldCodigo.addKeyListener(new KeyAdapter() {
@@ -90,7 +120,7 @@ public class ClienteGUI extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				
 				if ( e.getKeyCode() == KeyEvent.VK_ENTER) {
-					buscarCliente();
+					//buscarCliente();
 					textFieldNome.requestFocus();
 				}
 			}
@@ -382,7 +412,6 @@ public class ClienteGUI extends JFrame {
 	}
 	
 	
-	
 	private boolean verificaDigitacaoDoNome() {
 
 		if (VariaveisProjeto.digitacaoCampo(textFieldNome.getText())) {
@@ -405,10 +434,10 @@ public class ClienteGUI extends JFrame {
 	private void mudaStatusCheckNome() {
 		checkNome.setVisible(true);
 		if(status == false) {
-			checkNome.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
+			checkNome.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
 		}
 		else {
-			checkNome.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
+			checkNome.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
 		}
 	}
 	
@@ -434,10 +463,10 @@ public class ClienteGUI extends JFrame {
 	private void mudaStatusCheckTelefone() {
 		checkTelefone.setVisible(true);
 		if(status == false) {
-			checkTelefone.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
+			checkTelefone.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
 		}
 		else {
-			checkTelefone.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
+			checkTelefone.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
 		}
 	}
 	
@@ -463,10 +492,10 @@ public class ClienteGUI extends JFrame {
 	private void mudaStatusCheckBairro() {
 		checkBairro.setVisible(true);
 		if(status == false) {
-			checkBairro.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
+			checkBairro.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
 		}
 		else {
-			checkBairro.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
+			checkBairro.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
 		}
 	}
 	
@@ -492,10 +521,10 @@ public class ClienteGUI extends JFrame {
 	private void mudaStatusCheckRua() {
 		checkRua.setVisible(true);
 		if(status == false) {
-			checkRua.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
+			checkRua.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
 		}
 		else {
-			checkRua.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
+			checkRua.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
 		}
 	}
 	
@@ -520,10 +549,10 @@ public class ClienteGUI extends JFrame {
 	private void mudaStatusCheckNumero() {
 		checkNumero.setVisible(true);
 		if(status == false) {
-			checkNumero.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
+			checkNumero.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/iconFechar.png")));
 		}
 		else {
-			checkNumero.setIcon(new ImageIcon(UsuarioGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
+			checkNumero.setIcon(new ImageIcon(ClienteGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
 		}
 	}
 	
@@ -538,24 +567,52 @@ public class ClienteGUI extends JFrame {
 	
 	private void excluirCliente() {
 		
+		Integer toReturn = 0;
+		
 		Cliente cliente = pegarDadosCliente();
 		
 		ClienteService clienteService = new ClienteService();
 		
-		clienteService.delete(cliente);
+		toReturn = clienteService.delete(cliente);
 		
-		limpaTextoCampo();
+		if (toReturn == VariaveisProjeto.ERRO_EXCLUSAO) {
+			showMensagem("Erro na exclusão do registro, verifique com seu administrador!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if ( toReturn == VariaveisProjeto.EXCLUSAO_REALIZADA) {
+			showMensagem("Exclusão do Registro realizada com sucesso!", "OK", JOptionPane.OK_OPTION);
+			limpaTextoCampo();
+			tabelaClienteModel.fireTableDataChanged();
+			cliente = new Cliente();
+		}
 	}
 	
 	protected void incluirCliente() {
 		
+		Integer toReturn = 0; 
+		
 		Cliente cliente = pegarDadosCliente();
 		
 		ClienteService clienteService = new ClienteService();
 		
-		clienteService.save(cliente);
+		toReturn = clienteService.save(cliente);
 		
-		limpaTextoCampo();
+		erroDigitacao(toReturn);
+		
+		if (toReturn == VariaveisProjeto.ERRO_INCLUSAO) {
+			showMensagem("Erro na inclusão do registro, verifique com seu administrador!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if ( toReturn == VariaveisProjeto.INCLUSAO_REALIZADA) {
+			showMensagem("Inclusão do Registro realizada com sucesso!", "OK", JOptionPane.OK_OPTION);
+			limpaTextoCampo();
+			tabelaClienteModel.saveCliente(cliente);
+			tabelaCliente.setModel(tabelaClienteModel);
+			tabelaClienteModel.fireTableDataChanged();
+			cliente = new Cliente();
+		}
+	}
+	
+	private void showMensagem(String mensagem, String status, int option) {
+		JOptionPane.showMessageDialog(null, mensagem,status, option);
 	}
 	
 	private void fecharCliente() {
@@ -564,32 +621,64 @@ public class ClienteGUI extends JFrame {
 	
 	protected void alterarCliente() {
 		
-		Cliente cliente = pegarDadosCliente();
+		Integer toReturn = 0;
 		
+		Cliente cliente = pegarDadosCliente();
+			
 		ClienteService clienteService = new ClienteService();
 		
-		clienteService.update(cliente);
+		toReturn = clienteService.update(cliente);
 		
-		limpaTextoCampo();
+		erroDigitacao(toReturn);
 		
+		if (toReturn == VariaveisProjeto.ERRO_ALTERACAO) {
+			showMensagem("Erro na alteração do registro, verifique com seu administrador!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if ( toReturn == VariaveisProjeto.ALTERACAO_REALIZADA) {
+			showMensagem("Alteração do Registro realizada com sucesso!", "OK", JOptionPane.OK_OPTION);
+			tabelaClienteModel.updateCliente(cliente, this.linha);
+			tabelaCliente.setModel(tabelaClienteModel);
+			tabelaClienteModel.fireTableDataChanged();
+			limpaTextoCampo();
+			cliente = new Cliente();
+		}
+	}
+	
+	private void erroDigitacao(Integer toReturn) {
+		if (toReturn == VariaveisProjeto.CLIENTE_NOME) {
+			status = false;
+			mudaStatusCheckNome();
+			showMensagem("Erro na digitação do nome, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if (toReturn == VariaveisProjeto.CLIENTE_TELEFONE) {
+			status = false;
+			mudaStatusCheckTelefone();
+			showMensagem("Erro na digitação do telefone, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if (toReturn == VariaveisProjeto.CLIENTE_BAIRRO) {
+			status = false;
+			mudaStatusCheckBairro();
+			showMensagem("Erro na digitação do bairro, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if (toReturn == VariaveisProjeto.CLIENTE_RUA) {
+			status = false;
+			mudaStatusCheckRua();
+			showMensagem("Erro na digitação da rua, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		if (toReturn == VariaveisProjeto.CLIENTE_NUMERO) {
+			status = false;
+			mudaStatusCheckNumero();
+			showMensagem("Erro na digitação do número, verifique!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	private void buscarCliente() {
 		
 		Cliente cliente = new Cliente();
-				
-		if(VariaveisProjeto.digitacaoCampo(textFieldCodigo.getText())) {
-			textFieldCodigo.requestFocus();
-			return;
-		}
+					
+		cliente = tabelaClienteModel.getCliente(this.linha);
 		
-			
-		Integer id = Integer.valueOf(textFieldCodigo.getText());
-		
-		ClienteService clienteService = new ClienteService();
-		
-		cliente = clienteService.findById(id);
-		
+		textFieldCodigo.setText(String.valueOf(cliente.getId()));
 		textFieldNome.setText(cliente.getNome());
 		textFieldTelefone.setText(cliente.getTelefone());
 		textFieldBairro.setText(cliente.getBairro());
@@ -606,13 +695,15 @@ public class ClienteGUI extends JFrame {
 			textFieldCodigo.requestFocus();
 		}
 		
+		if(VariaveisProjeto.digitacaoCampo(textFieldCodigo.getText()) == false ) {
+			cliente.setId( Integer.valueOf(textFieldCodigo.getText()));
+		}
 		
-		cliente.setId( VariaveisProjeto.converteToInteger(textFieldCodigo.getText()));
 		cliente.setNome(textFieldNome.getText());
 		cliente.setTelefone(textFieldTelefone.getText());
 		cliente.setBairro(textFieldBairro.getText());
 		cliente.setRua(textFieldRua.getText());
-		cliente.setNome(textFieldNome.getText());
+		cliente.setNumero(textFieldNumero.getText());
 		   
 	    return cliente;
 	}

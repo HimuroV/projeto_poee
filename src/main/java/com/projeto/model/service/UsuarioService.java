@@ -9,7 +9,6 @@ import com.projeto.model.dao.UsuarioDao;
 import com.projeto.model.models.Usuario;
 
 public class UsuarioService extends ConexaoBancoService {
-	
 	private UsuarioDao usuarioDao;
 	
 	public UsuarioService() {
@@ -131,11 +130,6 @@ public class UsuarioService extends ConexaoBancoService {
 		return VariaveisProjeto.DIGITACAO_OK;
 	}
 	
-	
-	
-	
-	
-
 
 	public UsuarioDao getUsuarioDao() {
 		return usuarioDao;

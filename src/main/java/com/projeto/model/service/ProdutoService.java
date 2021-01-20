@@ -28,7 +28,7 @@ public class ProdutoService extends ConexaoBancoService{
 				trx.begin();
 				this.getProdutoDao().save(produto);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.INCLUSAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -53,14 +53,15 @@ public class ProdutoService extends ConexaoBancoService{
 		
 		EntityTransaction trx = this.getTransaction();
 		
-		if ( validarDigitacao(produto) == VariaveisProjeto.DIGITACAO_OK) {
+		toReturn = validarDigitacao(produto);
+		if ( toReturn == VariaveisProjeto.DIGITACAO_OK) {
 		
 			try {
 			
 				trx.begin();
 				this.getProdutoDao().update(produto);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.ALTERACAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -72,10 +73,7 @@ public class ProdutoService extends ConexaoBancoService{
 				this.close();
 			}
 		
-		}else {
-			toReturn = VariaveisProjeto.NOME_CAMPO_VAZIO;
 		}
-		
 		return toReturn;
 	}
 	
@@ -92,7 +90,7 @@ public class ProdutoService extends ConexaoBancoService{
 			Produto produtoEncontrado = this.getProdutoDao().findById(produto.getId());
 			this.getProdutoDao().remove(produtoEncontrado);
 			trx.commit();
-
+			toReturn = VariaveisProjeto.EXCLUSAO_REALIZADA;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if ( trx.isActive() ) {
@@ -133,5 +131,14 @@ public class ProdutoService extends ConexaoBancoService{
 	
 	public ProdutoDao getProdutoDao() {
 		return produtoDao;
+	}
+	
+	public Integer countTotalRegister() {
+		return produtoDao.countTotalRegister(Produto.class);
+	}
+
+	public List<Produto> listProdutoPaginacao(Integer numeroPagina, Integer defaultPagina) {
+		
+		return produtoDao.listProdutoPaginacao(numeroPagina,defaultPagina);
 	}
 }

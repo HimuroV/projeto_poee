@@ -9,8 +9,7 @@ import com.projeto.model.dao.ClienteDao;
 import com.projeto.model.models.Cliente;
 
 public class ClienteService extends ConexaoBancoService{
-
-private ClienteDao clienteDao;
+	private ClienteDao clienteDao;
 	
 	public ClienteService() {
 		this.clienteDao = new ClienteDao(this.getEntityManager());
@@ -29,7 +28,7 @@ private ClienteDao clienteDao;
 				trx.begin();
 				this.getClienteDao().save(cliente);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.INCLUSAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -54,14 +53,15 @@ private ClienteDao clienteDao;
 		
 		EntityTransaction trx = this.getTransaction();
 		
-		if ( validarDigitacao(cliente) == VariaveisProjeto.DIGITACAO_OK) {
+		toReturn = validarDigitacao(cliente);
+		if ( toReturn == VariaveisProjeto.DIGITACAO_OK) {
 		
 			try {
 			
 				trx.begin();
 				this.getClienteDao().update(cliente);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.ALTERACAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -73,10 +73,7 @@ private ClienteDao clienteDao;
 				this.close();
 			}
 		
-		}else {
-			toReturn = VariaveisProjeto.NOME_CAMPO_VAZIO;
 		}
-		
 		return toReturn;
 	}
 	
@@ -93,7 +90,7 @@ private ClienteDao clienteDao;
 			Cliente clienteEncontrado = this.getClienteDao().findById(cliente.getId());
 			this.getClienteDao().remove(clienteEncontrado);
 			trx.commit();
-
+			toReturn = VariaveisProjeto.EXCLUSAO_REALIZADA;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if ( trx.isActive() ) {
@@ -116,7 +113,6 @@ private ClienteDao clienteDao;
 	public List<Cliente> findAll(){
 		return this.getClienteDao().findAll(Cliente.class);
 	}
-	
 	
 	public Integer validarDigitacao(Cliente cliente) {
 		
@@ -142,5 +138,14 @@ private ClienteDao clienteDao;
 
 	public ClienteDao getClienteDao() {
 		return clienteDao;
+	}
+	
+	public Integer countTotalRegister() {
+		return clienteDao.countTotalRegister(Cliente.class);
+	}
+
+	public List<Cliente> listClientePaginacao(Integer numeroPagina, Integer defaultPagina) {
+		
+		return clienteDao.listClientePaginacao(numeroPagina,defaultPagina);
 	}
 }

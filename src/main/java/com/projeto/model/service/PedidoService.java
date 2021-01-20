@@ -8,9 +8,7 @@ import com.projeto.estrutura.util.VariaveisProjeto;
 import com.projeto.model.dao.PedidoDao;
 import com.projeto.model.models.Pedido;
 
-
 public class PedidoService extends ConexaoBancoService{
-
 	private PedidoDao pedidoDao;
 	
 	public PedidoService() {
@@ -30,7 +28,7 @@ public class PedidoService extends ConexaoBancoService{
 				trx.begin();
 				this.getPedidoDao().save(pedido);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.INCLUSAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -55,14 +53,15 @@ public class PedidoService extends ConexaoBancoService{
 		
 		EntityTransaction trx = this.getTransaction();
 		
-		if ( validarDigitacao(pedido) == VariaveisProjeto.DIGITACAO_OK) {
+		toReturn = validarDigitacao(pedido);
+		if ( toReturn == VariaveisProjeto.DIGITACAO_OK) {
 		
 			try {
 			
 				trx.begin();
 				this.getPedidoDao().update(pedido);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.ALTERACAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -74,10 +73,7 @@ public class PedidoService extends ConexaoBancoService{
 				this.close();
 			}
 		
-		}else {
-			toReturn = VariaveisProjeto.NOME_CAMPO_VAZIO;
 		}
-		
 		return toReturn;
 	}
 	
@@ -94,7 +90,7 @@ public class PedidoService extends ConexaoBancoService{
 			Pedido pedidoEncontrado = this.getPedidoDao().findById(pedido.getId());
 			this.getPedidoDao().remove(pedidoEncontrado);
 			trx.commit();
-
+			toReturn = VariaveisProjeto.EXCLUSAO_REALIZADA;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if ( trx.isActive() ) {
@@ -135,11 +131,19 @@ public class PedidoService extends ConexaoBancoService{
 		if ( VariaveisProjeto.digitacaoCampo(pedido.getTroco())) {
 			return VariaveisProjeto.PEDIDO_TROCO;
 		}
-		
 		return VariaveisProjeto.DIGITACAO_OK;
 	}
 
 	public PedidoDao getPedidoDao() {
 		return pedidoDao;
+	}
+	
+	public Integer countTotalRegister() {
+		return pedidoDao.countTotalRegister(Pedido.class);
+	}
+
+	public List<Pedido> listPedidoPaginacao(Integer numeroPagina, Integer defaultPagina) {
+		
+		return pedidoDao.listPedidoPaginacao(numeroPagina,defaultPagina);
 	}
 }

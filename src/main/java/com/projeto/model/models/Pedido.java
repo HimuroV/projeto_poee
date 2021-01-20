@@ -20,6 +20,7 @@ public class Pedido {
 	private String tipo_pagamento;
 	private double troco;
 	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PEDIDO_ID")
@@ -97,7 +98,7 @@ public class Pedido {
 	public String toString() {
 		return "Pedido [id=" + id + ", data=" + data + ", hora=" + hora + ", valor_total=" + valor_total
 				+ ", tipo_pagamento=" + tipo_pagamento + ", troco=" + troco + "]";
-	} 
+	}
 	
 	
 }

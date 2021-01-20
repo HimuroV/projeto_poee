@@ -25,7 +25,7 @@ public class VariaveisProjeto {
 	
 	public static final Integer INCLUSAO_REALIZADA = 1;
 	public static final Integer ALTERACAO_REALIZADA = 2;
-	public static final Integer EXCLUSAO_REALIZADA =3;
+	public static final Integer EXCLUSAO_REALIZADA = 3;
 	
 	public static final Integer DIGITACAO_OK = 100;
 	public static final Integer NOME_CAMPO_VAZIO = 200;
@@ -43,7 +43,7 @@ public class VariaveisProjeto {
 	public static final Integer CLIENTE_TELEFONE = 401;
 	public static final Integer CLIENTE_BAIRRO = 402;
 	public static final Integer CLIENTE_RUA = 403;
-	public static final Integer CLIENTE_NUMERO = 404;
+	public static final Integer CLIENTE_NUMERO = 405;
 	
 	//Pedido
 	public static final Integer PEDIDO_DATA = 500;
@@ -51,6 +51,7 @@ public class VariaveisProjeto {
 	public static final Integer PEDIDO_VALOR_TOTAL = 502;
 	public static final Integer PEDIDO_TIPO_PAGAMENTO = 503;
 	public static final Integer PEDIDO_TROCO = 504;
+	public static final Integer PEDIDO_VALOR_RECEBIDO = 505;
 	
 	//ItemPedido
 	public static final Integer ITEM_PEDIDO_QUANTIDADE = 600;

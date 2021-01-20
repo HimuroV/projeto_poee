@@ -28,7 +28,7 @@ private IngredienteDao ingredienteDao;
 				trx.begin();
 				this.getIngredienteDao().save(ingrediente);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.INCLUSAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -53,14 +53,15 @@ private IngredienteDao ingredienteDao;
 		
 		EntityTransaction trx = this.getTransaction();
 		
-		if ( validarDigitacao(ingrediente) == VariaveisProjeto.DIGITACAO_OK) {
+		toReturn = validarDigitacao(ingrediente);
+		if (  toReturn == VariaveisProjeto.DIGITACAO_OK) {
 		
 			try {
 			
 				trx.begin();
 				this.getIngredienteDao().update(ingrediente);
 				trx.commit();
-			
+				toReturn = VariaveisProjeto.ALTERACAO_REALIZADA;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				if ( trx.isActive() ) {
@@ -72,10 +73,7 @@ private IngredienteDao ingredienteDao;
 				this.close();
 			}
 		
-		}else {
-			toReturn = VariaveisProjeto.NOME_CAMPO_VAZIO;
-		}
-		
+		}		
 		return toReturn;
 	}
 	
@@ -92,7 +90,7 @@ private IngredienteDao ingredienteDao;
 			Ingrediente ingredienteEncontrado = this.getIngredienteDao().findById(ingrediente.getId());
 			this.getIngredienteDao().remove(ingredienteEncontrado);
 			trx.commit();
-
+			toReturn = VariaveisProjeto.EXCLUSAO_REALIZADA;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if ( trx.isActive() ) {
@@ -121,7 +119,7 @@ private IngredienteDao ingredienteDao;
 		if ( VariaveisProjeto.digitacaoCampo(ingrediente.getNome())) {
 			return VariaveisProjeto.INGREDIENTE_NOME;
 		}
-		if ( VariaveisProjeto.digitacaoCampo(ingrediente.getQtde_estoque())) {
+		if ( VariaveisProjeto.digitacaoCampo(ingrediente.getQuantidade_estoque())) {
 			return VariaveisProjeto.INGREDIENTE_QTDE_ESTOQUE;
 		}
 		if ( VariaveisProjeto.digitacaoCampo(ingrediente.getCusto_unitario())) {
@@ -133,5 +131,14 @@ private IngredienteDao ingredienteDao;
 	
 	public IngredienteDao getIngredienteDao() {
 		return ingredienteDao;
+	}
+	
+	public Integer countTotalRegister() {
+		return ingredienteDao.countTotalRegister(Ingrediente.class);
+	}
+
+	public List<Ingrediente> listIngredientePaginacao(Integer numeroPagina, Integer defaultPagina) {
+		
+		return ingredienteDao.listIngredientePaginacao(numeroPagina,defaultPagina);
 	}
 }
