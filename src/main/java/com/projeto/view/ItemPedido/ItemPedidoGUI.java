@@ -11,10 +11,18 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import com.projeto.estrutura.util.VariaveisProjeto;
+import com.projeto.model.models.Produto;
+import com.projeto.model.models.Cliente;
 import com.projeto.model.models.ItemPedido;
+import com.projeto.model.models.Pedido;
+import com.projeto.model.models.Produto;
+import com.projeto.model.service.ProdutoService;
 import com.projeto.model.service.ItemPedidoService;
+import com.projeto.model.service.PedidoService;
 import com.projeto.view.ItemPedido.ItemPedidoGUI;
 import com.projeto.view.ItemPedido.TabelaItemPedidoModel;
+import com.projeto.view.produto.BuscaProduto;
+import com.projeto.view.pedido.BuscaPedido;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -50,12 +58,20 @@ public class ItemPedidoGUI extends JDialog {
 	private JButton btnExcluir;
 	private JButton btnSair;
 
+	private Produto produto;
+	private Pedido pedido;
 	private JTable tabelaItemPedido;
 	private TabelaItemPedidoModel tabelaItemPedidoModel;
 	private int linha = 0;
 	private int acao = 0;
 	
 	private boolean status = true;
+	private JLabel lblNewLabel;
+	private JTextField textFieldCodigoPedido;
+	private JButton btnPedido;
+	private JLabel lblProduto;
+	private JTextField textFieldNomeProduto;
+	private JButton btnProduto;
 
 	public ItemPedidoGUI(JFrame frame, boolean modal, JTable tabelaItemPedido, TabelaItemPedidoModel tabelaItemPedidoModel, int linha, int acao) {
 		
@@ -97,7 +113,7 @@ private void configuraAcaoItemPedido() {
 	}
 	
 	private void initComponents() {
-		setBounds(100, 100, 276, 247);
+		setBounds(100, 100, 452, 316);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -235,21 +251,52 @@ private void configuraAcaoItemPedido() {
 			}
 		});
 		btnSair.setIcon(new ImageIcon(ItemPedidoGUI.class.getResource("/com/projeto/estrutura/imagens/sair.png")));
+		
+		lblNewLabel = new JLabel("Pedido");
+		
+		textFieldCodigoPedido = new JTextField();
+		textFieldCodigoPedido.setEditable(false);
+		textFieldCodigoPedido.setColumns(10);
+		
+		btnPedido = new JButton("Pedido");
+		btnPedido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscaPedido();
+			}
+		});
+		btnPedido.setIcon(new ImageIcon(ItemPedidoGUI.class.getResource("/com/projeto/estrutura/imagens/search.png")));
+		
+		lblProduto = new JLabel("Produto");
+		
+		textFieldNomeProduto = new JTextField();
+		textFieldNomeProduto.setEditable(false);
+		textFieldNomeProduto.setColumns(10);
+		
+		btnProduto = new JButton("Produto");
+		btnProduto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscaProduto();
+			}
+		});
+		btnProduto.setIcon(new ImageIcon(ItemPedidoGUI.class.getResource("/com/projeto/estrutura/imagens/search.png")));
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addGap(34)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblValorUnitario)
-						.addComponent(lblQuantidade)
-						.addComponent(lblCodigo)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblValorTotalItem)
+					.addContainerGap(19, Short.MAX_VALUE)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_contentPanel.createSequentialGroup()
 							.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnExcluir)
-								.addComponent(btnIncluir))))
-					.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblValorUnitario)
+								.addComponent(lblQuantidade)
+								.addComponent(lblCodigo)
+								.addComponent(lblValorTotalItem)
+								.addComponent(lblNewLabel)
+								.addComponent(lblProduto))
+							.addPreferredGap(ComponentPlacement.RELATED))
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addComponent(btnIncluir)
+							.addGap(14)))
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(textFieldCodigo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPanel.createSequentialGroup()
@@ -261,12 +308,26 @@ private void configuraAcaoItemPedido() {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(checkValorUnitario))
 						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addComponent(textFieldValorTotalItem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPanel.createSequentialGroup()
+									.addComponent(btnAlterar)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnExcluir))
+								.addGroup(gl_contentPanel.createSequentialGroup()
+									.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(textFieldCodigoPedido, Alignment.LEADING)
+										.addComponent(textFieldValorTotalItem, Alignment.LEADING))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(checkValorTotalItem)
+										.addComponent(btnPedido))))
+							.addGap(15)
+							.addComponent(btnSair))
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addComponent(textFieldNomeProduto, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(checkValorTotalItem))
-						.addComponent(btnAlterar)
-						.addComponent(btnSair))
-					.addContainerGap(21, Short.MAX_VALUE))
+							.addComponent(btnProduto)))
+					.addContainerGap(49, Short.MAX_VALUE))
 		);
 		gl_contentPanel.setVerticalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
@@ -287,25 +348,60 @@ private void configuraAcaoItemPedido() {
 							.addComponent(textFieldValorUnitario, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(checkValorUnitario)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblValorTotalItem)
-						.addComponent(textFieldValorTotalItem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblValorTotalItem)
+							.addComponent(textFieldValorTotalItem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(checkValorTotalItem))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnIncluir)
-						.addComponent(btnAlterar))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(lblNewLabel)
+						.addComponent(textFieldCodigoPedido, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnPedido))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblProduto)
+						.addComponent(textFieldNomeProduto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnProduto))
+					.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSair)
 						.addComponent(btnExcluir)
-						.addComponent(btnSair))
-					.addContainerGap(67, Short.MAX_VALUE))
+						.addComponent(btnAlterar)
+						.addComponent(btnIncluir))
+					.addGap(26))
 		);
 		contentPanel.setLayout(gl_contentPanel);
 		
 		limpaTextoCampo();
 		
 		desabilitaCheckCampos();
+	}
+	
+	protected void buscaProduto() {
+		produto = new Produto();
+		BuscaProduto buscaProduto = new BuscaProduto(new JFrame(), true);
+		buscaProduto.setLocationRelativeTo(null);
+		buscaProduto.setVisible(true);
+		
+		if(buscaProduto.isSelectProduto()) {
+			ProdutoService produtoService = new ProdutoService();
+			produto = produtoService.findById(buscaProduto.getCodigoProduto()); 
+			textFieldNomeProduto.setText(produto.getNome());
+		}	
+	}
+	
+	protected void buscaPedido() {
+		pedido = new Pedido();
+		BuscaPedido buscaPedido = new BuscaPedido(new JFrame(), true);
+		buscaPedido.setLocationRelativeTo(null);
+		buscaPedido.setVisible(true);
+		
+		if(buscaPedido.isSelectPedido()) {
+			PedidoService pedidoService = new PedidoService();
+			pedido = pedidoService.findById(buscaPedido.getCodigoPedido()); 
+			textFieldCodigoPedido.setText(pedido.getId().toString());
+		}
 	}
 
 	private boolean verificaDigitacaoDaQuantidade() {
@@ -503,6 +599,13 @@ private void excluirItemPedido() {
 		textFieldQuantidade.setText(String.valueOf(itemPedido.getQuantidade()));
 		textFieldValorUnitario.setText(String.valueOf(itemPedido.getValor_unitario()));
 		textFieldValorTotalItem.setText(String.valueOf(itemPedido.getValor_total_item()));
+		textFieldCodigoPedido.setText(String.valueOf(itemPedido.getPedido().getId()));
+		pedido = new Pedido();
+		pedido.setId(itemPedido.getPedido().getId());
+		textFieldNomeProduto.setText(itemPedido.getProduto().getNome());
+		produto = new Produto();
+		produto.setId(itemPedido.getProduto().getId());
+		produto.setNome(itemPedido.getProduto().getNome());
 	}
 	
 	public ItemPedido pegarDadosItemPedido() {
@@ -520,7 +623,8 @@ private void excluirItemPedido() {
 		itemPedido.setQuantidade(Integer.valueOf(textFieldQuantidade.getText()));
 		itemPedido.setValor_unitario(Double.valueOf(textFieldValorUnitario.getText()));
 		itemPedido.setValor_total_item(Double.valueOf(textFieldValorTotalItem.getText()));
-		   
+		itemPedido.setPedido(pedido);
+		itemPedido.setProduto(produto); 
 	    return itemPedido;
 	}
 	
@@ -530,6 +634,7 @@ private void excluirItemPedido() {
 		textFieldQuantidade.setText(VariaveisProjeto.LIMPA_CAMPO);
 		textFieldValorUnitario.setText(VariaveisProjeto.LIMPA_CAMPO);
 		textFieldValorTotalItem.setText(VariaveisProjeto.LIMPA_CAMPO);
-		
+		textFieldCodigoPedido.setText(VariaveisProjeto.LIMPA_CAMPO);
+		textFieldNomeProduto.setText(VariaveisProjeto.LIMPA_CAMPO);
 	}
 }

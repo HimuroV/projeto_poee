@@ -19,7 +19,8 @@ public class ProdutoDao extends GenericDao<Produto, Integer>{
 		
 		List<Produto> listaProduto = new ArrayList<Produto>();
 		
-		Query query = this.getEntityManager().createQuery("SELECT u FROM Produto u ")
+		Query query = this.getEntityManager().createQuery("SELECT u FROM Produto u "
+											  + "LEFT JOIN FETCH u.ingredientes ")
 											 .setFirstResult(numeroPagina)
 											 .setMaxResults(defaultPagina);
 		listaProduto = query.getResultList();

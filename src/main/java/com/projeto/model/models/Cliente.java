@@ -1,10 +1,14 @@
 package com.projeto.model.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +20,21 @@ public class Cliente {
 	private String telefone;
 	private String bairro;
 	private String rua;
+	private String numero;
+	
+	private List<Pedido> pedido;
+	
+	public Cliente() {}
+	
+	public Cliente(Integer id, String nome, String telefone, String bairro, String rua, String numero) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.telefone = telefone;
+		this.bairro = bairro;
+		this.rua = rua;
+		this.numero = numero;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,7 +85,17 @@ public class Cliente {
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-	private String numero;
+	
+	//um para muitos
+	
+	@OneToMany( mappedBy = "cliente", cascade = CascadeType.ALL)
+	public List<Pedido> getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(List<Pedido> pedido) {
+		this.pedido = pedido;
+	}
 
 	@Override
 	public int hashCode() {

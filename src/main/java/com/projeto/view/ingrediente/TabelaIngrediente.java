@@ -88,7 +88,7 @@ public class TabelaIngrediente extends JInternalFrame {
 	public TabelaIngrediente() {
 
 		initComponents();
-		//iniciaPaginacao();
+		iniciaPaginacao();
 	}
 	private void initComponents() {
 		setBounds(100, 100, 808, 489);

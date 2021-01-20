@@ -18,7 +18,8 @@ public class PedidoDao extends GenericDao<Pedido, Integer> {
 		
 		List<Pedido> listaPedido = new ArrayList<Pedido>();
 		
-		Query query = this.getEntityManager().createQuery("SELECT u FROM Pedido u ")
+		Query query = this.getEntityManager().createQuery("SELECT u FROM Pedido u "
+											 + "LEFT JOIN FETCH u.cliente")
 											 .setFirstResult(numeroPagina)
 											 .setMaxResults(defaultPagina);
 		listaPedido = query.getResultList();

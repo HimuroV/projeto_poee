@@ -2,11 +2,18 @@ package com.projeto.model.models;
 
 
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +27,21 @@ public class Pedido {
 	private String tipo_pagamento;
 	private double troco;
 	
+	private Cliente cliente;
+	
+	private List<ItemPedido> itempedido;
+	
+	public Pedido() {}
+	
+	public Pedido(Integer id, String data, String hora, double valor_total, String tipo_pagamento, double troco) {
+		super();
+		this.id = id;
+		this.data = data;
+		this.hora = hora;
+		this.valor_total = valor_total;
+		this.tipo_pagamento = tipo_pagamento;
+		this.troco = troco;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +91,28 @@ public class Pedido {
 	}
 	public void setTroco(double d) {
 		this.troco = d;
+	}
+	
+	//um para muitos
+	
+	@OneToMany( mappedBy = "pedido", cascade = CascadeType.ALL)
+	public List<ItemPedido> getItemPedido() {
+		return itempedido;
+	}
+
+	public void setItemPedido(List<ItemPedido> itempedido) {
+		this.itempedido = itempedido;
+	}
+	
+	// muitos para um
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CLIENTE_ID", nullable = true)
+	public Cliente getCliente() {
+		return cliente;
+	}
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	
 	@Override

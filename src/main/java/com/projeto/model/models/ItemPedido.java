@@ -2,9 +2,12 @@ package com.projeto.model.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +18,9 @@ public class ItemPedido {
 	private Integer quantidade;
 	private double valor_unitario;
 	private double valor_total_item;
+	
+	private Pedido pedido;
+	private Produto produto;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +54,28 @@ public class ItemPedido {
 	}
 	public void setValor_total_item(double d) {
 		this.valor_total_item = d;
+	}
+	
+	// muitos para um
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PEDIDO_ID", nullable = false)
+	public Pedido getPedido() {
+		return pedido;
+	}
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+	
+	// muitos para um
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Produto_ID", nullable = false)
+	public Produto getProduto() {
+		return produto;
+	}
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 	
 	@Override

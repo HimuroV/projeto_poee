@@ -1,10 +1,17 @@
 package com.projeto.model.models;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +21,20 @@ public class Ingrediente {
 	private String nome;
 	private Integer quantidade_estoque;
 	private double custo_unitario;
+	
+	private List<Produto> produtos;
+	
+	public Ingrediente(Integer id, String nome, Integer quantidade_estoque, double custo_unitario) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.quantidade_estoque = quantidade_estoque;
+		this.custo_unitario = custo_unitario;
+	}
+
+	public Ingrediente() {
+		super();
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +69,18 @@ public class Ingrediente {
 	public void setCusto_unitario(double d) {
 		this.custo_unitario = d;
 	}
+	
+	//muitos para muitos
+	
+		@ManyToMany(mappedBy = "ingredientes")
+		public List<Produto> getProdutos() {
+			return produtos;
+		}
+
+		public void setProdutos(List<Produto> produtos) {
+			this.produtos = produtos;
+		}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

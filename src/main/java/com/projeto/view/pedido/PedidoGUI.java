@@ -11,8 +11,14 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import com.projeto.estrutura.util.VariaveisProjeto;
+import com.projeto.model.models.Cliente;
+
 import com.projeto.model.models.Pedido;
+import com.projeto.model.service.ClienteService;
+
 import com.projeto.model.service.PedidoService;
+import com.projeto.view.cliente.BuscaCliente;
+
 import com.projeto.view.pedido.PedidoGUI;
 
 import javax.swing.GroupLayout;
@@ -56,12 +62,16 @@ public class PedidoGUI extends JDialog {
 	private JLabel checkTipoPagamento;
 	private JLabel checkTroco;
 	
+	private Cliente cliente;
 	private JTable tabelaPedido;
 	private TabelaPedidoModel tabelaPedidoModel;
 	private int linha = 0;
 	private int acao = 0;
 	
 	private boolean status = true;
+	private JLabel lblNewLabel_5;
+	private JTextField textFieldNomeCliente;
+	private JButton btnCliente;
 
 	public PedidoGUI(JFrame frame, boolean modal, JTable tabelaPedido, TabelaPedidoModel tabelaPedidoModel, int linha, int acao) {
 		
@@ -103,7 +113,7 @@ public class PedidoGUI extends JDialog {
 	}
 	
 	private void initComponents() {
-		setBounds(100, 100, 403, 299);
+		setBounds(100, 100, 521, 299);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -296,6 +306,20 @@ public class PedidoGUI extends JDialog {
 		
 		checkTroco = new JLabel("");
 		checkTroco.setIcon(new ImageIcon(PedidoGUI.class.getResource("/com/projeto/estrutura/imagens/ok.png")));
+		
+		lblNewLabel_5 = new JLabel("Cliente");
+		
+		textFieldNomeCliente = new JTextField();
+		textFieldNomeCliente.setEditable(false);
+		textFieldNomeCliente.setColumns(10);
+		
+		btnCliente = new JButton("Cliente");
+		btnCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscaCliente();
+			}
+		});
+		btnCliente.setIcon(new ImageIcon(PedidoGUI.class.getResource("/com/projeto/estrutura/imagens/search.png")));
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
@@ -321,7 +345,9 @@ public class PedidoGUI extends JDialog {
 									.addComponent(lblNewLabel_4)
 									.addPreferredGap(ComponentPlacement.RELATED))
 								.addGroup(gl_contentPanel.createSequentialGroup()
-									.addComponent(lblNewLabel_6)
+									.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+										.addComponent(lblNewLabel_5)
+										.addComponent(lblNewLabel_6))
 									.addPreferredGap(ComponentPlacement.UNRELATED)))
 							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPanel.createSequentialGroup()
@@ -344,7 +370,11 @@ public class PedidoGUI extends JDialog {
 								.addGroup(gl_contentPanel.createSequentialGroup()
 									.addComponent(textFieldTroco, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(checkTroco))))
+									.addComponent(checkTroco))
+								.addGroup(gl_contentPanel.createSequentialGroup()
+									.addComponent(textFieldNomeCliente, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnCliente))))
 						.addGroup(gl_contentPanel.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(btnIncluir)
@@ -354,7 +384,7 @@ public class PedidoGUI extends JDialog {
 							.addComponent(btnExcluir)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnSair)))
-					.addContainerGap(27, Short.MAX_VALUE))
+					.addContainerGap(64, Short.MAX_VALUE))
 		);
 		gl_contentPanel.setVerticalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
@@ -390,19 +420,39 @@ public class PedidoGUI extends JDialog {
 						.addComponent(lblNewLabel_6)
 						.addComponent(textFieldTroco, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkTroco))
-					.addGap(38)
+					.addGap(13)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_5)
+						.addComponent(textFieldNomeCliente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnCliente))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnIncluir)
 						.addComponent(btnAlterar)
 						.addComponent(btnExcluir)
 						.addComponent(btnSair))
-					.addContainerGap(16, Short.MAX_VALUE))
+					.addContainerGap(22, Short.MAX_VALUE))
 		);
 		contentPanel.setLayout(gl_contentPanel);
 		
 		limpaTextoCampo();
 		
 		desabilitaCheckCampos();
+	}
+	
+	protected void buscaCliente() {
+		cliente = new Cliente();
+		BuscaCliente buscaCliente = new BuscaCliente(new JFrame(), true);
+		buscaCliente.setLocationRelativeTo(null);
+		buscaCliente.setVisible(true);
+		
+		if(buscaCliente.isSelectCliente()) {
+			ClienteService clienteService = new ClienteService();
+			cliente = clienteService.findById(buscaCliente.getCodigoCliente()); 
+			textFieldNomeCliente.setText(cliente.getNome());
+		}
+		
+		
 	}
 	
 	private boolean verificaDigitacaoDaData() {
@@ -676,6 +726,10 @@ private void excluirPedido() {
 		textFieldValorTotal.setText(String.valueOf(pedido.getValor_total()));
 		textFieldTipoPagamento.setText(pedido.getTipo_pagamento());
 		textFieldTroco.setText(String.valueOf(pedido.getTroco()));
+		textFieldNomeCliente.setText(pedido.getCliente().getNome());
+		cliente = new Cliente();
+		cliente.setId(pedido.getCliente().getId());
+		cliente.setNome(pedido.getCliente().getNome());
 	}
 	
 	public Pedido pegarDadosPedido() {
@@ -695,6 +749,7 @@ private void excluirPedido() {
 		pedido.setValor_total(Double.valueOf(textFieldValorTotal.getText()));
 		pedido.setTipo_pagamento(textFieldTipoPagamento.getText());
 		pedido.setTroco(Double.valueOf(textFieldTroco.getText()));
+		pedido.setCliente(cliente);
 	    return pedido;
 	}
 	
@@ -705,5 +760,6 @@ private void excluirPedido() {
 		textFieldHora.setText(VariaveisProjeto.LIMPA_CAMPO);
 		textFieldValorTotal.setText(VariaveisProjeto.LIMPA_CAMPO);
 		textFieldTipoPagamento.setText(VariaveisProjeto.LIMPA_CAMPO);
+		textFieldNomeCliente.setText(VariaveisProjeto.LIMPA_CAMPO);
 	}
 }

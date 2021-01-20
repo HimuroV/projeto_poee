@@ -1,10 +1,19 @@
 package com.projeto.model.models;
 
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +23,20 @@ public class Produto {
 	private String nome;
 	private double valor_venda;
 	private String descricao;
+	
+	private Set<Ingrediente> ingredientes;
+	
+	private List<ItemPedido> itempedido;
+	
+	public Produto() {}
+	
+	public Produto(Integer id, String nome, double valor_venda, String descricao) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.valor_venda = valor_venda;
+		this.descricao = descricao;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +72,30 @@ public class Produto {
 		this.descricao = descricao;
 	}
 	
+	// muitos para muitos
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "TAB_PRODUTO_INGREDIENTE",
+	     joinColumns = @JoinColumn(name="PRODUTO_ID"),
+	     inverseJoinColumns = @JoinColumn(name="INGREDIENTE_ID"))
+	public Set<Ingrediente> getIngredientes() {
+		return ingredientes;
+	}
+	public void setIngredientes(Set<Ingrediente> ingredientes) {
+		this.ingredientes = ingredientes;
+	}
+	
+	//um para muitos
+	
+	@OneToMany( mappedBy = "produto", cascade = CascadeType.ALL)
+	public List<ItemPedido> getItemPedido() {
+		return itempedido;
+	}
+
+	public void setItemPedido(List<ItemPedido> itempedido) {
+		this.itempedido = itempedido;
+	}
+		
 	@Override
 	public int hashCode() {
 		final int prime = 31;
