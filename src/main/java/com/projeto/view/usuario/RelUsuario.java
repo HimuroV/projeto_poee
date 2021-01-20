@@ -11,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 
 import com.projeto.model.models.PrintJasperReport;
 import com.projeto.model.models.Usuario;
-import com.projeto.model.service.ClienteService;
 import com.projeto.model.service.JasperReportsService;
 import com.projeto.model.service.UsuarioService;
 
@@ -21,6 +20,8 @@ import java.awt.event.ActionEvent;
 
 public class RelUsuario extends JDialog {
 
+
+	private static final long serialVersionUID = -7027105329159856616L;
 	private final JPanel contentPanel = new JPanel();
 	private JButton btsql;
 	
@@ -37,10 +38,9 @@ public class RelUsuario extends JDialog {
 		btsql = new JButton("SQL");
 		btsql.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				imprimeRelatorioPorSQL();
+				//imprimeRelatorioPorSQL();
 			}
 
-			
 		});
 		contentPanel.add(btsql);
 		{
@@ -69,14 +69,14 @@ public class RelUsuario extends JDialog {
 		}
 	}
 	
-	private void imprimeRelatorioPorSQL() {
-		PrintJasperReport printJasperReport = new PrintJasperReport();
-		JasperReportsService jasperReportsService = new JasperReportsService();
-		printJasperReport.setFile("rel_cliente_sql");
-		setVisible(false);
-		jasperReportsService.generateSQLReports(printJasperReport);
-		
-	}
+//	private void imprimeRelatorioPorSQL() {
+//		PrintJasperReport printJasperReport = new PrintJasperReport();
+//		JasperReportsService jasperReportsService = new JasperReportsService();
+//		printJasperReport.setFile("rel_usuario");
+//		setVisible(false);
+//		jasperReportsService.generateSQLReports(printJasperReport);
+//		
+//	}
 	
 	private void imprimeRelatorioPorLista() {
 		UsuarioService usuarioService = new UsuarioService();

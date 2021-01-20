@@ -70,6 +70,7 @@ public class TabelaPedido extends JInternalFrame {
 	private Integer defaultPagina = 5;
 	private Integer totalPagina = 1;
 	private Integer numeroPagina = 1;
+	private JButton btnRelatorio;
 
 
 	public static void main(String[] args) {
@@ -92,7 +93,7 @@ public class TabelaPedido extends JInternalFrame {
 	}
 	
 	private void initComponents() {
-		setBounds(100, 100, 713, 461);
+		setBounds(100, 100, 729, 461);
 		
 		lblNewLabel = new JLabel("Pesquisar");
 		
@@ -209,6 +210,16 @@ public class TabelaPedido extends JInternalFrame {
 			}
 		});
 		btnNewButton.setIcon(new ImageIcon(TabelaPedido.class.getResource("/com/projeto/estrutura/imagens/book_go.png")));
+		
+		btnRelatorio = new JButton("Relatório");
+		btnRelatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RelPedido relPedido = new RelPedido(new JFrame(), true);
+				relPedido.setLocationRelativeTo(null);
+				relPedido.setVisible(true);
+			}
+		});
+		btnRelatorio.setIcon(new ImageIcon(TabelaPedido.class.getResource("/com/projeto/estrutura/imagens/pdf.png")));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -223,7 +234,9 @@ public class TabelaPedido extends JInternalFrame {
 							.addComponent(btnExcluir)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnNewButton)
-							.addGap(321))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnRelatorio)
+							.addGap(244))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
@@ -246,14 +259,14 @@ public class TabelaPedido extends JInternalFrame {
 									.addComponent(lblTotal)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(lblFinal))
-								.addComponent(scrollPane, Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblNewLabel)
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(textFieldNome, GroupLayout.PREFERRED_SIZE, 494, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnPesquisar)))
-							.addContainerGap(28, Short.MAX_VALUE))))
+									.addComponent(btnPesquisar))
+								.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE))
+							.addGap(28))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -286,7 +299,8 @@ public class TabelaPedido extends JInternalFrame {
 						.addComponent(btnIncluir)
 						.addComponent(btnAlterar)
 						.addComponent(btnExcluir)
-						.addComponent(btnNewButton))
+						.addComponent(btnNewButton)
+						.addComponent(btnRelatorio))
 					.addContainerGap(33, Short.MAX_VALUE))
 		);
 		

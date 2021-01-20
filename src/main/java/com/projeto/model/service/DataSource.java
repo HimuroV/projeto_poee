@@ -13,6 +13,7 @@ public class DataSource extends ConexaoBancoService {
 	public Connection getConnection() {
 		
 		Session session = getEntityManager().unwrap(Session.class);
+		
 		Conexao conexao = new Conexao();
 		
 		session.doWork(conexao);

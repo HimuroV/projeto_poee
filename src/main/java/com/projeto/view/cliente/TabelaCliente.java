@@ -70,6 +70,7 @@ public class TabelaCliente extends JInternalFrame {
 	private Integer defaultPagina = 5;
 	private Integer totalPagina = 1;
 	private Integer numeroPagina = 1;
+	private JButton btnRelatorio;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -88,7 +89,7 @@ public class TabelaCliente extends JInternalFrame {
 	public TabelaCliente() {
 
 		initComponents();
-		//iniciaPaginacao();
+		iniciaPaginacao();
 	}
 	private void initComponents() {
 		setBounds(100, 100, 818, 500);
@@ -208,6 +209,16 @@ public class TabelaCliente extends JInternalFrame {
 			}
 		});
 		btnSair.setIcon(new ImageIcon(TabelaCliente.class.getResource("/com/projeto/estrutura/imagens/book_go.png")));
+		
+		btnRelatorio = new JButton("Relatorio");
+		btnRelatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RelCliente relCliente = new RelCliente(new JFrame(), true);
+				relCliente.setLocationRelativeTo(null);
+				relCliente.setVisible(true);
+			}
+		});
+		btnRelatorio.setIcon(new ImageIcon(TabelaCliente.class.getResource("/com/projeto/estrutura/imagens/pdf.png")));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -236,7 +247,7 @@ public class TabelaCliente extends JInternalFrame {
 							.addComponent(btnProximo)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnUltimo)
-							.addPreferredGap(ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 327, Short.MAX_VALUE)
 							.addComponent(lblPagina)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblInicio)
@@ -253,7 +264,9 @@ public class TabelaCliente extends JInternalFrame {
 							.addComponent(btnExcluir)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnSair)
-							.addContainerGap(436, Short.MAX_VALUE))))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnRelatorio)
+							.addContainerGap(359, Short.MAX_VALUE))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -284,8 +297,9 @@ public class TabelaCliente extends JInternalFrame {
 						.addComponent(btnIncluir)
 						.addComponent(btnAlterar)
 						.addComponent(btnExcluir)
-						.addComponent(btnSair))
-					.addContainerGap(48, Short.MAX_VALUE))
+						.addComponent(btnSair)
+						.addComponent(btnRelatorio))
+					.addContainerGap(46, Short.MAX_VALUE))
 		);
 		
 		tabelaCliente = new JTable();
@@ -416,5 +430,4 @@ public class TabelaCliente extends JInternalFrame {
 	public JTable getTabelaCliente() {
 		return tabelaCliente;
 	}
-	
 }
